@@ -1,0 +1,31 @@
+run:
+  deadline: 5m
+linters:
+  enable-all: true
+  disable:
+    - exhaustruct
+    - tagliatelle
+    # deprecated
+    - varcheck
+    - deadcode
+    - ifshort
+    - nosnakecase
+    - structcheck
+    - rowserrcheck
+    - structcheck
+    - wastedassign
+    - scopelint
+    - maligned
+    - interfacer
+    - exhaustivestruct
+    - golint
+linters-settings:
+  errcheck:
+    check-blank: false
+    exclude-functions:
+      # Used in HTTP handlers, any error is handled by the server itself.
+      - (net/http.ResponseWriter).Write
+      # Never check the logger error.
+      - (github.com/go-kit/log.Logger).Log
+  nolintlint:
+    require-specific: true

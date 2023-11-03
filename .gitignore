@@ -19,3 +19,9 @@
 
 # Go workspace file
 go.work
+
+.vagrant/
+.vscode/
+bin/*
+*.log
+*.out
