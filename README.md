@@ -1,0 +1,1 @@
+# golang-opensky-network-api
