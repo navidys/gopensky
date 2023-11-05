@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/rs/zerolog v1.31.0
-	github.com/spf13/cobra v1.7.0
+	github.com/spf13/cobra v1.8.0
 	golang.org/x/term v0.13.0
 )
 

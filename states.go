@@ -9,7 +9,9 @@ import (
 )
 
 // Retrieve state vectors for a given time. If time = 0 the most recent ones are taken.
-func GetStates(ctx context.Context, time int64, icao24 []string, bBox *BoundingBoxOptions) (*States, error) {
+func GetStates(ctx context.Context, time int64, icao24 []string,
+	bBox *BoundingBoxOptions, extended bool,
+) (*States, error) {
 	var statesRep StatesResponse
 
 	conn, err := GetClient(ctx)
@@ -17,14 +19,7 @@ func GetStates(ctx context.Context, time int64, icao24 []string, bBox *BoundingB
 		return nil, fmt.Errorf("client: %w", err)
 	}
 
-	requestParams := make(url.Values)
-	if time >= 0 {
-		requestParams.Add("time", fmt.Sprintf("%d", time))
-	}
-
-	for _, icao24Item := range icao24 {
-		requestParams.Add("icao24", icao24Item)
-	}
+	requestParams := getStateRequestParams(time, icao24, bBox, extended)
 
 	response, err := conn.DoGetRequest(ctx, nil, "/states/all", requestParams)
 	if err != nil {
@@ -58,6 +53,40 @@ func GetStates(ctx context.Context, time int64, icao24 []string, bBox *BoundingB
 	}
 
 	return &states, nil
+}
+
+// NewBoundingBox returns new bounding box options for states information gathering.
+func NewBoundingBox(lamin float64, lomin float64, lamax float64, lomax float64) *BoundingBoxOptions {
+	return &BoundingBoxOptions{
+		Lamin: lamin,
+		Lomin: lomin,
+		Lamax: lamax,
+		Lomax: lomax,
+	}
+}
+
+func getStateRequestParams(time int64, icao24 []string, bBox *BoundingBoxOptions, extended bool) url.Values {
+	requestParams := make(url.Values)
+	if time >= 0 {
+		requestParams.Add("time", fmt.Sprintf("%d", time))
+	}
+
+	for _, icao24Item := range icao24 {
+		requestParams.Add("icao24", icao24Item)
+	}
+
+	if extended {
+		requestParams.Add("extended", "1")
+	}
+
+	if bBox != nil {
+		requestParams.Add("lamax", floatToString(bBox.Lamax))
+		requestParams.Add("lamin", floatToString(bBox.Lamin))
+		requestParams.Add("lomax", floatToString(bBox.Lomax))
+		requestParams.Add("lamax", floatToString(bBox.Lamax))
+	}
+
+	return requestParams
 }
 
 func decodeRawStateVector(data []interface{}) (*StateVector, error) { //nolint:funlen,cyclop,gocognit,gocyclo

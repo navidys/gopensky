@@ -30,12 +30,24 @@ func preStateRun(cmd *cobra.Command, args []string) error {
 }
 
 func runStates(cmd *cobra.Command, args []string) {
-	var icao24List []string
+	var (
+		icao24List      []string
+		boundingBoxOpts *gopensky.BoundingBoxOptions
+	)
 
 	icao24Input := strings.TrimSpace(cmdIcao24List)
 
 	if icao24Input != "" {
 		icao24List = strings.Split(icao24Input, ",")
+	}
+
+	if len(cmdStatesBoundingBox) == 4 { //nolint:gomnd
+		boundingBoxOpts = &gopensky.BoundingBoxOptions{
+			Lamin: cmdStatesBoundingBox[0],
+			Lomin: cmdStatesBoundingBox[1],
+			Lamax: cmdStatesBoundingBox[2],
+			Lomax: cmdStatesBoundingBox[3],
+		}
 	}
 
 	conn, err := gopensky.NewConnection(context.Background(), cmdUsername, cmdPassword)
@@ -45,7 +57,7 @@ func runStates(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	states, err := gopensky.GetStates(conn, cmdTime, icao24List, nil)
+	states, err := gopensky.GetStates(conn, cmdTime, icao24List, boundingBoxOpts, cmdStatesExtended)
 	if err != nil {
 		log.Error().Msgf("%v", err)
 
@@ -94,7 +106,7 @@ func printStatesTemplate(states *gopensky.States) { //nolint:funlen
 
 	floatToString := func(data *float64) string {
 		if data != nil {
-			return fmt.Sprintf("%f", *data)
+			return fmt.Sprintf("%.4f", *data)
 		}
 
 		return "<nil>"
