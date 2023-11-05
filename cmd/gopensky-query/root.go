@@ -16,7 +16,7 @@ import (
 var (
 	cmdUsername          string
 	cmdPassword          string
-	cmdIcao24List        string
+	cmdIcao24List        []string
 	cmdTime              int64 = -1
 	cmdDebug                   = false
 	cmdPrintJSON               = false
@@ -73,7 +73,7 @@ func init() { //nolint:gochecknoinits
 	rootCmd.PersistentFlags().BoolVarP(&cmdPrintJSON, "json", "j", cmdPrintJSON, "print json output")
 
 	// states command
-	statesCommand.Flags().StringVarP(&cmdIcao24List, "icao24", "i", "",
+	statesCommand.Flags().StringSliceVarP(&cmdIcao24List, "icao24", "i", cmdIcao24List,
 		"comma separates (,) list of unique ICAO 24-bit address of the transponder in hex string representation")
 
 	statesCommand.Flags().Int64VarP(&cmdTime, "time", "t", cmdTime,
@@ -83,7 +83,7 @@ func init() { //nolint:gochecknoinits
 		"request the category of aircraft ")
 
 	statesCommand.Flags().Float64SliceVar(&cmdStatesBoundingBox, "box", nil,
-		"query a certain area defined by a bounding box of WGS84 coordinates ([lamin,lomin,lamax,lomax])")
+		"query a certain area defined by a bounding box of WGS84 coordinates (lamin,lomin,lamax,lomax)")
 
 	rootCmd.AddCommand(statesCommand)
 }

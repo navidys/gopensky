@@ -5,14 +5,15 @@
 This is the golang implementation of the OpenSky network's live API.
 The API lets you retrieve live airspace information (ADS-B and Mode S data) for research and non-commerical purposes.
 
-A command line (`gopensky-query`) is also available to query the opensky network api.
+For documentation and examples visit [Golang OpenSky Network API](https://navidys.github.io/gopensky/).
 
-`NOTE:` there are some limitation sets for anonymous and OpenSky users, visit [OpenSky Network Rest API documentation](https://openskynetwork.github.io/opensky-api/) for more information.
+A `gopensky-query` binary command line is also available to query the opensky network api.
 
-For more information about OpenSky Network visit [OpenSky Network Website](https://opensky-network.org/).
+`NOTE:` there are some limitation sets for anonymous and OpenSky users, visit following links for more information:
+* [OpenSky Network Rest API documentation](https://openskynetwork.github.io/opensky-api/)
+* [OpenSky Network Website](https://opensky-network.org/).
 
-## Example
-### gopensky module
+## gopensky module
 
 ```
 import (
@@ -43,9 +44,18 @@ func main() {
 }
 ```
 
-### gopensky-query cmd (json output)
+## gopensky-query cmd
+
+### build
+
 ```
-$ gopensky /bin/gopensky-query states -j
+$ make binary
+```
+
+### json output
+
+```
+$ ./bin/gopensky-query /bin/gopensky-query states -j
 {
     "time": 1699160183,
     "states": [
@@ -76,9 +86,9 @@ $ gopensky /bin/gopensky-query states -j
 }
 ```
 
-### gopensky-query cmd (table output)
+### table output
 ```
-$ gopensky /bin/gopensky-query states
+$  ./bin/gopensky-query /bin/gopensky-query states
 ```
 
-![Screenshot](./docs/gopensky-query.png)
+![Screenshot](./docs/_static/gopensky-query.png)

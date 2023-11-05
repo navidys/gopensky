@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"strings"
 	"text/tabwriter"
 
 	"github.com/navidys/gopensky"
@@ -30,16 +29,7 @@ func preStateRun(cmd *cobra.Command, args []string) error {
 }
 
 func runStates(cmd *cobra.Command, args []string) {
-	var (
-		icao24List      []string
-		boundingBoxOpts *gopensky.BoundingBoxOptions
-	)
-
-	icao24Input := strings.TrimSpace(cmdIcao24List)
-
-	if icao24Input != "" {
-		icao24List = strings.Split(icao24Input, ",")
-	}
+	var boundingBoxOpts *gopensky.BoundingBoxOptions
 
 	if len(cmdStatesBoundingBox) == 4 { //nolint:gomnd
 		boundingBoxOpts = &gopensky.BoundingBoxOptions{
@@ -57,7 +47,7 @@ func runStates(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	states, err := gopensky.GetStates(conn, cmdTime, icao24List, boundingBoxOpts, cmdStatesExtended)
+	states, err := gopensky.GetStates(conn, cmdTime, cmdIcao24List, boundingBoxOpts, cmdStatesExtended)
 	if err != nil {
 		log.Error().Msgf("%v", err)
 

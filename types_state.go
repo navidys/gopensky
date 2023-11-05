@@ -165,3 +165,13 @@ type BoundingBoxOptions struct {
 	// upper bound for the longitude in decimal degrees.
 	Lomax float64
 }
+
+// NewBoundingBox returns new bounding box options for states information gathering.
+func NewBoundingBox(lamin float64, lomin float64, lamax float64, lomax float64) *BoundingBoxOptions {
+	return &BoundingBoxOptions{
+		Lamin: lamin,
+		Lomin: lomin,
+		Lamax: lamax,
+		Lomax: lomax,
+	}
+}

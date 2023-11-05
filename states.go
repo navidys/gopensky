@@ -55,16 +55,6 @@ func GetStates(ctx context.Context, time int64, icao24 []string,
 	return &states, nil
 }
 
-// NewBoundingBox returns new bounding box options for states information gathering.
-func NewBoundingBox(lamin float64, lomin float64, lamax float64, lomax float64) *BoundingBoxOptions {
-	return &BoundingBoxOptions{
-		Lamin: lamin,
-		Lomin: lomin,
-		Lamax: lamax,
-		Lomax: lomax,
-	}
-}
-
 func getStateRequestParams(time int64, icao24 []string, bBox *BoundingBoxOptions, extended bool) url.Values {
 	requestParams := make(url.Values)
 	if time >= 0 {

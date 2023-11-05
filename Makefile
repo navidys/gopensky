@@ -7,7 +7,7 @@ PKG_MANAGER ?= $(shell command -v dnf yum|head -n1)
 BUILDFLAGS := -mod=vendor $(BUILDFLAGS)
 
 #=================================================
-# Build binary, clean, install and uninstall
+# Build binary, documents
 #=================================================
 
 all: binary
@@ -25,6 +25,11 @@ $(TARGET): $(SRC)
 	@echo "running go build"
 	@mkdir -p $(BIN)
 	$(GO) build $(BUILDFLAGS) -o $(BIN)/$(TARGET) ./cmd/$(TARGET)/
+
+.PHONY: docs
+docs: ## Generates html documents
+	@make -C docs
+
 
 #=================================================
 # Required tools installation tartgets
@@ -83,7 +88,7 @@ gofmt:   ## Run gofmt
 .PHONY: codespell
 codespell: ## Run codespell
 	@echo "running codespell"
-	@codespell -S ./vendor,go.mod,go.sum,./.git
+	@codespell -S ./vendor,go.mod,go.sum,./.git,./docs/_build
 
 #=================================================
 # Help menu
