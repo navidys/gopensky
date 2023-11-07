@@ -56,7 +56,7 @@ func preArrivalsRun(cmd *cobra.Command, args []string) error {
 		return gopensky.ErrEmptyAirportName
 	}
 
-	if cmdBeginTime < 0 || cmdEndTime < 0 {
+	if cmdBeginTime <= 0 || cmdEndTime <= 0 {
 		return gopensky.ErrInvalidUnixTime
 	}
 

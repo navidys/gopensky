@@ -19,7 +19,7 @@ func GetArrivalsByAirport(ctx context.Context, airport string, begin int64, end 
 		return nil, ErrEmptyAirportName
 	}
 
-	if begin < 0 || end < 0 {
+	if begin <= 0 || end <= 0 {
 		return nil, ErrInvalidUnixTime
 	}
 
