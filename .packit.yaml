@@ -20,10 +20,6 @@ jobs:
       - epel-9-aarch64
       - epel-9-ppc64le
       - epel-9-s390x
-      - centos-stream-9-x86_64
-      - centos-stream-9-aarch64
-      - centos-stream-9-ppc64le
-      - centos-stream-9-s390x
     actions:
       post-upstream-clone:
         - "rpkg spec --outdir ./"
