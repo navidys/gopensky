@@ -10,7 +10,7 @@
 %global import_path github.com/navidys/gopensky
 %global git0 https://%{import_path}
 
-Name: gopensky-query
+Name: gopensky
 Version: 0.1.0
 Release: 1%{?dist}
 Summary: Query OpenSky Network live's API and retrieve live airspace information (ADS-B and Mode S data).
