@@ -9,10 +9,6 @@
 set -eo pipefail
 
 PKG_NAME="gopensky"
-<<<<<<< HEAD
-=======
-PKG_CMD_NAME="gopensky-query"
->>>>>>> main
 
 # Get Version from HEAD
 HEAD_VERSION=$(grep "^VERSION=" VERSION | awk -F '=' '{print $2}')
@@ -32,8 +28,4 @@ sed -i "s/^Release:.*/Release: $PACKIT_RPMSPEC_RELEASE%{?dist}/" ${PKG_CMD_NAME}
 sed -i "s/^Source0:.*.tar.gz/Source0: %{name}-${HEAD_VERSION}.tar.gz/" ${PKG_CMD_NAME}.spec
 
 # Update setup macro to use the correct build dir
-<<<<<<< HEAD
 sed -i "s/^%setup.*/%setup -T -b 0 -q -n %{name}-${HEAD_VERSION}/" ${PKG_NAME}.spec
-=======
-sed -i "s/^%setup.*/%setup -T -b 0 -q -n %{name}-${HEAD_VERSION}/" ${PKG_CMD_NAME}.spec
->>>>>>> main
