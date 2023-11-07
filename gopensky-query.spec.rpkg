@@ -59,7 +59,7 @@ install -p ./bin/%{name} %{buildroot}%{_bindir}
 
 %files
 %license LICENSE
-%doc README.md
+%doc README.md MAINTAINERS.md
 %{_bindir}/%{name}
 
 
