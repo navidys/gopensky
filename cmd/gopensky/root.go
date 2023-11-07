@@ -22,17 +22,30 @@ var (
 	cmdPrintJSON               = false
 	cmdStatesExtended          = false
 	cmdStatesBoundingBox []float64
+	cmdPrintVersion      bool
+
+	buildVersion  string
+	buildRevision string
 
 	rootCmd = &cobra.Command{
-		Use:               "gopensky-query",
+		Use:               "gopensky",
 		Short:             "Query opensky network live API",
 		Long:              "Query opensky network live API information (ADS-B and Mode S data)",
 		PersistentPreRunE: preRun,
+		Run:               run,
 	}
 
 	errInvalidTimeInput = errors.New("invalid time entry")
 	errPasswordEntry    = errors.New("password entry error")
 )
+
+func run(cmd *cobra.Command, args []string) {
+	if cmdPrintVersion {
+		fmt.Printf("%s version %s-%s\n", cmd.Use, buildVersion, buildRevision) //nolint:forbidigo
+
+		os.Exit(0)
+	}
+}
 
 func preRun(cmd *cobra.Command, args []string) error {
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
@@ -71,6 +84,7 @@ func init() { //nolint:gochecknoinits
 	rootCmd.PersistentFlags().StringVarP(&cmdUsername, "username", "u", cmdUsername, "connection username")
 	rootCmd.PersistentFlags().BoolVarP(&cmdDebug, "debug", "d", cmdDebug, "run in debug mode")
 	rootCmd.PersistentFlags().BoolVarP(&cmdPrintJSON, "json", "j", cmdPrintJSON, "print json output")
+	rootCmd.PersistentFlags().BoolVarP(&cmdPrintVersion, "version", "v", cmdPrintVersion, "print version and exit")
 
 	// states command
 	statesCommand.Flags().StringSliceVarP(&cmdIcao24List, "icao24", "i", cmdIcao24List,

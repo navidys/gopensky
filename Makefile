@@ -5,6 +5,8 @@ SRC = $(shell find . -type f -name '*.go' -not -path "./vendor/*")
 PRE_COMMIT = $(shell command -v bin/venv/bin/pre-commit ~/.local/bin/pre-commit pre-commit | head -n1)
 PKG_MANAGER ?= $(shell command -v dnf yum|head -n1)
 BUILDFLAGS := -mod=vendor $(BUILDFLAGS)
+VERSION = $(shell cat VERSION  | grep VERSION | cut -d'=' -f2)
+REVISION = $(shell cat VERSION  | grep REVISION | cut -d'=' -f2)
 
 #=================================================
 # Build binary, documents
@@ -17,14 +19,14 @@ clean:
 	@rm -rf $(BIN)
 
 .PHONY: binary
-binary: $(TARGET)  ## Build prometheus-podman-exporter binary
+binary: $(TARGET)  ## Build gopensky binary
 	@true
 
 .PHONY: $(TARGET)
 $(TARGET): $(SRC)
 	@echo "running go build"
 	@mkdir -p $(BIN)
-	$(GO) build $(BUILDFLAGS) -o $(BIN)/$(TARGET) ./cmd/$(TARGET)/
+	$(GO) build $(BUILDFLAGS) -ldflags="-X 'main.buildVersion=$(VERSION)' -X 'main.buildRevision=$(REVISION)'" -o $(BIN)/$(TARGET) ./cmd/$(TARGET)/
 
 .PHONY: docs
 docs: ## Generates html documents
