@@ -1,0 +1,32 @@
+# See the documentation for more information:
+# https://packit.dev/docs/configuration/
+
+specfile_path: gopensky-query.spec
+
+jobs:
+  - job: copr_build
+    trigger: pull_request
+    enable_net: true
+    srpm_build_deps:
+      - make
+      - openssl-devel
+      - rpkg
+    targets:
+      - fedora-all-x86_64
+      - fedora-all-aarch64
+      - fedora-all-ppc64le
+      - fedora-all-s390x
+      - epel-9-x86_64
+      - epel-9-aarch64
+      - epel-9-ppc64le
+      - epel-9-s390x
+      - centos-stream-9-x86_64
+      - centos-stream-9-aarch64
+      - centos-stream-9-ppc64le
+      - centos-stream-9-s390x
+    actions:
+      post-upstream-clone:
+        - "rpkg spec --outdir ./"
+
+      fix-spec-file:
+        "bash .packit.sh"
