@@ -45,6 +45,9 @@ var (
 	errStateVecSpi            = errors.New("state vector spi assertion failed")
 	errStateVecPositionSource = errors.New("state vector position source assertion failed")
 	errStateVecCategory       = errors.New("state vector category assertion failed")
+
+	ErrEmptyAirportName = errors.New("empty airport name")
+	ErrInvalidUnixTime  = errors.New("invalid unix time")
 )
 
 type StatesResponse struct {

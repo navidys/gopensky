@@ -50,6 +50,8 @@ func :ref:`GetArrivalsByAirport <FUNC_GET_ARRIVALS_BY_AIRPORT>`
 
     Retrieves flights for a certain airport which arrived within a given time interval [being, end].
 
+    The given time interval must not be larger than seven days!
+
     .. code-block:: go
 
         func GetArrivalsByAirport(ctx context.Context, airport string, begin int64, end int64) ([]FlightData, error)

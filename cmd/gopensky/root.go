@@ -22,6 +22,9 @@ var (
 	cmdPrintJSON               = false
 	cmdStatesExtended          = false
 	cmdStatesBoundingBox []float64
+	cmdAirport           string
+	cmdBeginTime         int64
+	cmdEndTime           int64
 	cmdPrintVersion      bool
 
 	buildVersion  string
@@ -99,5 +102,16 @@ func init() { //nolint:gochecknoinits
 	statesCommand.Flags().Float64SliceVar(&cmdStatesBoundingBox, "box", nil,
 		"query a certain area defined by a bounding box of WGS84 coordinates (lamin,lomin,lamax,lomax)")
 
+	// flights command
+	arrivalsCommand.Flags().StringVarP(&cmdAirport, "airport", "a", cmdAirport,
+		"ICAO identier for the airport")
+
+	arrivalsCommand.Flags().Int64VarP(&cmdBeginTime, "being", "b", cmdBeginTime,
+		"start of time interval to retrieve flights for as Unix time (seconds since epoch)")
+
+	arrivalsCommand.Flags().Int64VarP(&cmdEndTime, "end", "e", cmdEndTime,
+		"end of time interval to retrieve flights for as Unix time (seconds since epoch)")
+
 	rootCmd.AddCommand(statesCommand)
+	rootCmd.AddCommand(arrivalsCommand)
 }
