@@ -1,6 +1,6 @@
 BIN := ./bin
 GO := go
-TARGET := gopensky-query
+TARGET := gopensky
 SRC = $(shell find . -type f -name '*.go' -not -path "./vendor/*")
 PRE_COMMIT = $(shell command -v bin/venv/bin/pre-commit ~/.local/bin/pre-commit pre-commit | head -n1)
 PKG_MANAGER ?= $(shell command -v dnf yum|head -n1)

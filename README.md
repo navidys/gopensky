@@ -7,7 +7,7 @@ The API lets you retrieve live airspace information (ADS-B and Mode S data) for 
 
 For documentation and examples visit [Golang OpenSky Network API](https://navidys.github.io/gopensky/).
 
-A `gopensky-query` binary command line is also available to query the opensky network api.
+A `gopensky` binary command line is also available to query the opensky network api.
 
 `NOTE:` there are some limitation sets for anonymous and OpenSky users, visit following links for more information:
 * [OpenSky Network Rest API documentation](https://openskynetwork.github.io/opensky-api/)
@@ -44,7 +44,7 @@ func main() {
 }
 ```
 
-## gopensky-query cmd
+## gopensky cmd
 
 ### build
 
@@ -55,7 +55,7 @@ $ make binary
 ### json output
 
 ```
-$ ./bin/gopensky-query /bin/gopensky-query states -j
+$ ./bin/gopensky states -j
 {
     "time": 1699160183,
     "states": [
@@ -88,7 +88,7 @@ $ ./bin/gopensky-query /bin/gopensky-query states -j
 
 ### table output
 ```
-$  ./bin/gopensky-query /bin/gopensky-query states
+$  ./bin/gopensky states
 ```
 
 ![Screenshot](./docs/_static/gopensky-query.png)
