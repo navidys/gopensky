@@ -33,7 +33,7 @@ BuildRequires: go-rpm-macros
 BuildRequires: make
 
 %description
-%{name} is a command line to query OpenSky Network API and retrieve 
+%{name} is a command line to query OpenSky Network API and retrieve
 live airspace information (ADS-B and Mode S data) for research and non-commerical purposes.
 
 %prep
