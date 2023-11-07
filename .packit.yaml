@@ -1,7 +1,7 @@
 # See the documentation for more information:
 # https://packit.dev/docs/configuration/
 
-specfile_path: gopensky-query.spec
+specfile_path: gopensky.spec
 
 jobs:
   - job: copr_build
