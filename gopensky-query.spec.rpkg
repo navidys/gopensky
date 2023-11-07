@@ -7,11 +7,7 @@
 %global debug_package %{nil}
 %endif
 
-%global provider github
-%global provider_tld com
-%global project navidys
-%global repo gopensky
-%global import_path %{provider}.%{provider_tld}/%{project}/%{repo}
+%global import_path github.com/navidys/gopensky
 %global git0 https://%{import_path}
 
 Name: gopensky-query
