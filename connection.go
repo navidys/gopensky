@@ -148,6 +148,8 @@ func (h apiResponse) processWithError(unmarshalInto interface{}) error {
 		return nil
 	}
 
+	log.Debug().Msg("process response (error)")
+
 	return handleError(h.Response.StatusCode, data)
 }
 
