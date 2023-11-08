@@ -44,51 +44,51 @@ type StateVector struct {
 	// Unique ICAO 24-bit address of the transponder in hex string representation.
 	Icao24 string `json:"icao24"`
 
-	// Callsign of the vehicle (8 chars). Can be null if no callsign has been received.
+	// Callsign of the vehicle (8 chars). Can be nil if no callsign has been received.
 	Callsign *string `json:"callsign"`
 
 	// Country name inferred from the ICAO 24-bit address.
 	OriginCountry string `json:"origin_country"`
 
 	// Unix timestamp (seconds) for the last position update.
-	// Can be null if no position report was received by OpenSky within the past 15s.
+	// Can be nil if no position report was received by OpenSky within the past 15s.
 	TimePosition *int64 `json:"time_position"`
 
 	// Unix timestamp (seconds) for the last update in general.
 	//  This field is updated for any new, valid message received from the transponder.
 	LastContact int64 `json:"last_contact"`
 
-	// WGS-84 longitude in decimal degrees. Can be null.
+	// WGS-84 longitude in decimal degrees. Can be nil.
 	Longitude *float64 `json:"longitude"`
 
-	// WGS-84 latitude in decimal degrees. Can be null.
+	// WGS-84 latitude in decimal degrees. Can be nil.
 	Latitude *float64 `json:"latitude"`
 
-	// Barometric altitude in meters. Can be null.
+	// Barometric altitude in meters. Can be nil.
 	BaroAltitude *float64 `json:"baro_altitude"`
 
 	// Boolean value which indicates if the position was retrieved from a surface position report.
 	OnGround bool `json:"on_ground"`
 
-	// Velocity over ground in m/s. Can be null.
+	// Velocity over ground in m/s. Can be nil.
 	Velocity *float64 `json:"velocity"`
 
-	// True track in decimal degrees clockwise from north (north=0°). Can be null.
+	// True track in decimal degrees clockwise from north (north=0°). Can be nil.
 	TrueTrack *float64 `json:"true_track"`
 
 	// Vertical rate in m/s.
 	// A positive value indicates that the airplane is climbing, a negative value indicates that it descends.
-	// Can be null.
+	// Can be nil.
 	VerticalRate *float64 `json:"vertical_rate"`
 
 	// IDs of the receivers which contributed to this state vector.
-	//  Is null if no filtering for sensor was used in the request.
+	//  Is nil if no filtering for sensor was used in the request.
 	Sensors []int `json:"sensors"`
 
-	// Geometric altitude in meters. Can be null.
+	// Geometric altitude in meters. Can be nil.
 	GeoAltitude *float64 `json:"geo_altitude"`
 
-	// The transponder code aka Squawk. Can be null.
+	// The transponder code aka Squawk. Can be nil.
 	Squawk *string `json:"squawk"`
 
 	// Whether flight status indicates special purpose indicator.
@@ -135,18 +135,18 @@ type FlighData struct {
 	FirstSeen int64 `json:"firstSeen"`
 
 	// ICAO code of the estimated departure airport.
-	// Can be null if the airport could not be identified.
+	// Can be nil if the airport could not be identified.
 	EstDepartureAirport *string `json:"estDepartureAirport"`
 
 	// Estimated time of arrival for the flight as Unix time (seconds since epoch).
 	LastSeen int64 `json:"lastSeen"`
 
 	// ICAO code of the estimated arrival airport.
-	// Can be null if the airport could not be identified.
+	// Can be nil if the airport could not be identified.
 	EstArrivalAirport *string `json:"estArrivalAirport"`
 
 	// Callsign of the vehicle (8 chars).
-	// Can be null if no callsign has been received.
+	// Can be nil if no callsign has been received.
 	// If the vehicle transmits multiple callsigns during the flight,
 	// we take the one seen most frequently.
 	Callsign *string `json:"callsign"`
