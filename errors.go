@@ -44,18 +44,9 @@ func (c connectionError) Unwrap() error {
 }
 
 type httpModelError struct {
-	// human error message, formatted for a human to read
-	// example: human error message
 	Message string `json:"message"`
-	// HTTP response code
-	// min: 400
-	ResponseCode int `json:"response"`
 }
 
 func (e httpModelError) Error() string {
 	return e.Message
-}
-
-func (e httpModelError) Code() int {
-	return e.ResponseCode
 }

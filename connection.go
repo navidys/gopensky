@@ -155,9 +155,7 @@ func (h apiResponse) processWithError(unmarshalInto interface{}) error {
 
 func handleError(statusCode int, data []byte) error {
 	errorModel := httpModelError{
-		// Because:      http.StatusText(statusCode),
-		Message:      string(data),
-		ResponseCode: statusCode,
+		Message: fmt.Sprintf("%s %s", http.StatusText(statusCode), data),
 	}
 
 	return errorModel

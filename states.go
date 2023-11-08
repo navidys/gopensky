@@ -19,6 +19,10 @@ func GetStates(ctx context.Context, time int64, icao24 []string,
 		return nil, fmt.Errorf("client: %w", err)
 	}
 
+	if time < 0 {
+		return nil, ErrInvalidUnixTime
+	}
+
 	requestParams := getStateRequestParams(time, icao24, bBox, extended)
 
 	response, err := conn.doGetRequest(ctx, nil, "/states/all", requestParams)

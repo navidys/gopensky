@@ -27,7 +27,7 @@ func runArrivals(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	flights, err := gopensky.GetArrivalsByAirport(conn, "ymml", cmdBeginTime, cmdEndTime)
+	flights, err := gopensky.GetArrivalsByAirport(conn, cmdAirport, cmdBeginTime, cmdEndTime)
 	if err != nil {
 		log.Error().Msgf("%v", err)
 
