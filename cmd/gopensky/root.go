@@ -104,7 +104,7 @@ func init() { //nolint:gochecknoinits
 
 	// flights command
 	arrivalsCommand.Flags().StringVarP(&cmdAirport, "airport", "a", cmdAirport,
-		"ICAO identier for the airport")
+		"ICAO identifier for the airport")
 
 	arrivalsCommand.Flags().Int64VarP(&cmdBeginTime, "being", "b", cmdBeginTime,
 		"start of time interval to retrieve flights for as Unix time (seconds since epoch)")

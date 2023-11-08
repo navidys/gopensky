@@ -59,7 +59,7 @@ func :ref:`GetArrivalsByAirport <FUNC_GET_ARRIVALS_BY_AIRPORT>`
 
     :Parameters:
         - **ctx** (`context.Context <https://pkg.go.dev/context#Context>`_) - connection context.
-        - **airport** (string) - ICAO identier for the airport.
+        - **airport** (string) - ICAO identifier for the airport.
         - **begin** (int64) - Start of time interval to retrieve flights for as Unix time (seconds since epoch).
         - **end** (int64)  - End of time interval to retrieve flights for as Unix time (seconds since epoch).
 
