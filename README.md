@@ -27,8 +27,9 @@ Next, include gopensky in you application:
 import "github.com/navidys/gopensky"
 ```
 
-Here is an example program once you've added the library, visit [Golang OpenSky Network API](https://navidys.github.io/gopensky/) for more examples.
+Here is an example program of retrieving flights for a Charles de Gaulle airport between Sunday October 08, 2023 08:55:42 and Tuesday October 10, 2023 08:55:42.
 
+Visit [Golang OpenSky Network API](https://navidys.github.io/gopensky/) for more examples.
 
 ```
 package main
@@ -50,7 +51,7 @@ func main() {
 	}
 
 	// retrieve arrivals flights of:
-	// airpor: LFPG (Charles de Gaulle)
+	// airport: LFPG (Charles de Gaulle)
 	// being time: 1696755342 (Sunday October 08, 2023 08:55:42 UTC)
 	// end time: 1696928142 (Tuesday October 10, 2023 08:55:42 UTC)
 

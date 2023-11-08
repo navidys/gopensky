@@ -90,7 +90,7 @@ Example of retrieving flights for a certain airport which arrived within a given
         }
 
         // retrieve arrivals flights of:
-        // airpor: LFPG (Charles de Gaulle)
+        // airport: LFPG (Charles de Gaulle)
         // being time: 1696755342 (Sunday October 08, 2023 08:55:42 UTC)
         // end time: 1696928142 (Tuesday October 10, 2023 08:55:42 UTC)
 
