@@ -10,7 +10,7 @@ import (
 func GetArrivalsByAirport(ctx context.Context, airport string, begin int64, end int64) ([]FlighData, error) {
 	var flighDataList []FlighData
 
-	conn, err := GetClient(ctx)
+	conn, err := getClient(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("client: %w", err)
 	}
@@ -25,14 +25,14 @@ func GetArrivalsByAirport(ctx context.Context, airport string, begin int64, end 
 
 	requestParams := getAirportRequestParams(airport, begin, end)
 
-	response, err := conn.DoGetRequest(ctx, nil, "/flights/arrival", requestParams)
+	response, err := conn.doGetRequest(ctx, nil, "/flights/arrival", requestParams)
 	if err != nil {
 		return nil, fmt.Errorf("do request: %w", err)
 	}
 
 	defer response.Body.Close()
 
-	if err := response.Process(&flighDataList); err != nil {
+	if err := response.process(&flighDataList); err != nil {
 		return nil, err
 	}
 

@@ -4,14 +4,12 @@ import (
 	"context"
 	"encoding/base64"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"net"
 	"net/http"
 	"net/url"
 
-	"github.com/navidys/gopensky/pkg/errorhandling"
 	"github.com/rs/zerolog/log"
 )
 
@@ -20,14 +18,9 @@ const (
 	clientKey     = valueKey("Client")
 )
 
-var (
-	errDialContext = errors.New("unable to get dial context")
-	errContextKey  = errors.New("invalid context key ")
-)
-
 type valueKey string
 
-type APIResponse struct {
+type apiResponse struct {
 	*http.Response
 	Request *http.Request
 }
@@ -38,20 +31,8 @@ type Connection struct {
 	client *http.Client
 }
 
-type ConnectionError struct {
-	Err error
-}
-
-func (c ConnectionError) Error() string {
-	return "unable to connect to api: " + c.Err.Error()
-}
-
-func (c ConnectionError) Unwrap() error {
-	return c.Err
-}
-
 func newConnectionError(err error) error {
-	return ConnectionError{Err: err}
+	return connectionError{err: err}
 }
 
 func NewConnection(ctx context.Context, username string, password string) (context.Context, error) {
@@ -84,8 +65,8 @@ func NewConnection(ctx context.Context, username string, password string) (conte
 	return context.WithValue(ctx, clientKey, &connection), nil
 }
 
-// GetClient from context build by NewConnection().
-func GetClient(ctx context.Context) (*Connection, error) {
+// getClient from context build by NewConnection().
+func getClient(ctx context.Context) (*Connection, error) {
 	if c, ok := ctx.Value(clientKey).(*Connection); ok {
 		return c, nil
 	}
@@ -93,21 +74,9 @@ func GetClient(ctx context.Context) (*Connection, error) {
 	return nil, fmt.Errorf("%w %s", errContextKey, clientKey)
 }
 
-// GetDialer returns raw Transport.DialContext from client.
-func (c *Connection) GetDialer(ctx context.Context) (net.Conn, error) {
-	client := c.client
-	transport := client.Transport.(*http.Transport) //nolint:forcetypeassert
-
-	if transport.DialContext != nil && transport.TLSClientConfig == nil {
-		return transport.DialContext(ctx, c.uri.Scheme, c.uri.String()) //nolint:wrapcheck
-	}
-
-	return nil, errDialContext
-}
-
-func (c *Connection) DoGetRequest(ctx context.Context, httpBody io.Reader,
+func (c *Connection) doGetRequest(ctx context.Context, httpBody io.Reader,
 	endpoint string, queryParams url.Values,
-) (*APIResponse, error) {
+) (*apiResponse, error) {
 	requestURL := fmt.Sprintf("%s/%s", c.uri, endpoint)
 
 	if len(queryParams) > 0 {
@@ -130,48 +99,38 @@ func (c *Connection) DoGetRequest(ctx context.Context, httpBody io.Reader,
 
 	response, err := c.client.Do(req) //nolint:bodyclose
 
-	return &APIResponse{response, req}, err //nolint:wrapcheck
+	return &apiResponse{response, req}, err //nolint:wrapcheck
 }
 
-func (h *APIResponse) IsInformational() bool {
+func (h *apiResponse) isInformational() bool {
 	return h.Response.StatusCode/100 == 1
 }
 
-func (h *APIResponse) IsSuccess() bool {
+func (h *apiResponse) isSuccess() bool {
 	return h.Response.StatusCode/100 == 2 //nolint:gomnd
 }
 
-func (h *APIResponse) IsRedirection() bool {
+func (h *apiResponse) isRedirection() bool {
 	return h.Response.StatusCode/100 == 3 //nolint:gomnd
 }
 
-func (h *APIResponse) IsConflictError() bool {
-	return h.Response.StatusCode == 409 //nolint:gomnd
-}
-
-func (h *APIResponse) IsClientError() bool {
-	return h.Response.StatusCode == 409 //nolint:gomnd
-}
-
-func (h *APIResponse) IsServerError() bool {
-	return h.Response.StatusCode/100 == 5 //nolint:gomnd
-}
-
-// Process drains the response body, and processes the HTTP status code
+// process drains the response body, and processes the HTTP status code
 // Note: Closing the response.Body is left to the caller.
-func (h APIResponse) Process(unmarshalInto interface{}) error {
-	return h.ProcessWithError(unmarshalInto, &errorhandling.ModelError{})
+func (h apiResponse) process(unmarshalInto interface{}) error {
+	return h.processWithError(unmarshalInto)
 }
 
-// ProcessWithError drains the response body, and processes the HTTP status code
+// processWithError drains the response body, and processes the HTTP status code
 // Note: Closing the response.Body is left to the caller.
-func (h APIResponse) ProcessWithError(unmarshalInto interface{}, unmarshalErrorInto interface{}) error {
+func (h apiResponse) processWithError(unmarshalInto interface{}) error {
 	data, err := io.ReadAll(h.Response.Body)
 	if err != nil {
 		return fmt.Errorf("unable to process API response: %w", err)
 	}
 
-	if h.IsSuccess() || h.IsRedirection() {
+	if h.isSuccess() || h.isRedirection() {
+		log.Debug().Msg("process response (success or redirection)")
+
 		if unmarshalInto != nil {
 			if err := json.Unmarshal(data, unmarshalInto); err != nil {
 				return fmt.Errorf("unmarshalling into %#v, data %q: %w", unmarshalInto, string(data), err)
@@ -183,17 +142,21 @@ func (h APIResponse) ProcessWithError(unmarshalInto interface{}, unmarshalErrorI
 		return nil
 	}
 
-	if h.IsConflictError() {
-		return handleError(data, unmarshalErrorInto)
+	if h.isInformational() {
+		log.Debug().Msg("process response (information)")
+
+		return nil
 	}
 
-	return handleError(data, &errorhandling.ModelError{})
+	return handleError(h.Response.StatusCode, data)
 }
 
-func handleError(data []byte, unmarshalErrorInto interface{}) error {
-	if err := json.Unmarshal(data, unmarshalErrorInto); err != nil {
-		return fmt.Errorf("unmarshalling error into %#v, data %q: %w", unmarshalErrorInto, string(data), err)
+func handleError(statusCode int, data []byte) error {
+	errorModel := httpModelError{
+		// Because:      http.StatusText(statusCode),
+		Message:      string(data),
+		ResponseCode: statusCode,
 	}
 
-	return unmarshalErrorInto.(error) //nolint:forcetypeassert
+	return errorModel
 }

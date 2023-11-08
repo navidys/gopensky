@@ -14,21 +14,21 @@ func GetStates(ctx context.Context, time int64, icao24 []string,
 ) (*States, error) {
 	var statesRep StatesResponse
 
-	conn, err := GetClient(ctx)
+	conn, err := getClient(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("client: %w", err)
 	}
 
 	requestParams := getStateRequestParams(time, icao24, bBox, extended)
 
-	response, err := conn.DoGetRequest(ctx, nil, "/states/all", requestParams)
+	response, err := conn.doGetRequest(ctx, nil, "/states/all", requestParams)
 	if err != nil {
 		return nil, fmt.Errorf("do request: %w", err)
 	}
 
 	defer response.Body.Close()
 
-	if err := response.Process(&statesRep); err != nil {
+	if err := response.process(&statesRep); err != nil {
 		return nil, err
 	}
 
