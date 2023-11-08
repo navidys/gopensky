@@ -1,4 +1,4 @@
-# gopensky (golang opensky network api)
+# Go OpenSKY Network API
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/navidys/gopensky)](https://pkg.go.dev/github.com/navidys/gopensky)
 [![Go Report](https://goreportcard.com/badge/github.com/navidys/gopensky)](https://goreportcard.com/report/github.com/navidys/gopensky)
 
@@ -7,13 +7,27 @@ The API lets you retrieve live airspace information (ADS-B and Mode S data) for 
 
 For documentation and examples visit [Golang OpenSky Network API](https://navidys.github.io/gopensky/).
 
-A `gopensky` binary command line is also available to query the opensky network api.
+A `gopensky` binary command line is also available to query the opensky network api, check [installation guide](./INSTALL.md) for RPM package installation or building from source.
 
 `NOTE:` there are some limitation sets for anonymous and OpenSky users, visit following links for more information:
 * [OpenSky Network Rest API documentation](https://openskynetwork.github.io/opensky-api/)
 * [OpenSky Network Website](https://opensky-network.org/).
 
-## gopensky module
+## Getting Started
+
+Install the latest version of the library:
+
+```
+$ go get github.com/navidys/gopensky
+```
+
+Next, include gopensky in you application:
+
+```
+import "github.com/navidys/gopensky"
+```
+
+Here is an example program once you've added the library, visit [Golang OpenSky Network API](https://navidys.github.io/gopensky/) for more examples.
 
 ```
 import (
@@ -44,51 +58,6 @@ func main() {
 }
 ```
 
-## gopensky cmd
+## License
 
-### build
-
-```
-$ make binary
-```
-
-### json output
-
-```
-$ ./bin/gopensky states -j
-{
-    "time": 1699160183,
-    "states": [
-        {
-            "icao24": "c067ae",
-            "callsign": "ACA327  ",
-            "origin_country": "Canada",
-            "time_position": 1699160183,
-            "last_contact": 1699160188,
-            "longitude": -114.0126,
-            "latitude": 51.1315,
-            "baro_altitude": null,
-            "on_ground": true,
-            "velocity": 0,
-            "true_track": 67.5,
-            "vertical_rate": null,
-            "sensors": null,
-            "geo_altitude": null,
-            "squawk": null,
-            "spi": false,
-            "position_source": 0,
-            "category": 0
-        },
-        {
-            ....
-        }
-    ]
-}
-```
-
-### table output
-```
-$  ./bin/gopensky states
-```
-
-![Screenshot](./docs/_static/gopensky-query.png)
+Licensed under the [Apache 2.0](LICENSE) license.
