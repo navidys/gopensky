@@ -1,9 +1,5 @@
 package gopensky
 
-import (
-	"errors"
-)
-
 const (
 	stateVecIaco24Index = 0 + iota
 	stateVecCallsignIndex
@@ -23,28 +19,6 @@ const (
 	stateVecSpiIndex
 	stateVecPositionSourceIndex
 	stateVecCategoryIndex
-)
-
-var (
-	errStateVecDataCount      = errors.New("invalid state vector data count")
-	errStateVecIcao24         = errors.New("state vector icao24 assertion failed")
-	errStateVecCallsign       = errors.New("state vector callsign assertion failed")
-	errStateVecOriginCountry  = errors.New("state vector origin country assertion failed")
-	errStateVecTimePosition   = errors.New("state vector time position assertion failed")
-	errStateVecLastContact    = errors.New("state vector last contact assertion failed")
-	errStateVecLongitude      = errors.New("state vector longitude assertion failed")
-	errStateVecLatitude       = errors.New("state vector latitude assertion failed")
-	errStateVecBaroAltitude   = errors.New("state vector baro altitude assertion failed")
-	errStateVecOnGround       = errors.New("state vector on ground assertion failed")
-	errStateVecVelocity       = errors.New("state vector velocity assertion failed")
-	errStateVecTrueTrack      = errors.New("state vector true track assertion failed")
-	errStateVecVerticalRate   = errors.New("state vector vertical rate assertion failed")
-	errStateVecSensors        = errors.New("state vector sensors assertion failed")
-	errStateVecGeoAltitude    = errors.New("state vector geo altitude assertion failed")
-	errStateVecSquawk         = errors.New("state vector squawk assertion failed")
-	errStateVecSpi            = errors.New("state vector spi assertion failed")
-	errStateVecPositionSource = errors.New("state vector position source assertion failed")
-	errStateVecCategory       = errors.New("state vector category assertion failed")
 )
 
 type StatesResponse struct {
@@ -150,6 +124,55 @@ type StateVector struct {
 	// 19 = Cluster Obstacle
 	// 20 = Line Obstacle
 	Category int `json:"category"`
+}
+
+type FlighData struct {
+	// Unique ICAO 24-bit address of the transponder in hex string representation.
+	// All letters are lower case.
+	Icao24 string `json:"icao24"`
+
+	// Estimated time of departure for the flight as Unix time (seconds since epoch).
+	FirstSeen int64 `json:"firstSeen"`
+
+	// ICAO code of the estimated departure airport.
+	// Can be null if the airport could not be identified.
+	EstDepartureAirport *string `json:"estDepartureAirport"`
+
+	// Estimated time of arrival for the flight as Unix time (seconds since epoch).
+	LastSeen int64 `json:"lastSeen"`
+
+	// ICAO code of the estimated arrival airport.
+	// Can be null if the airport could not be identified.
+	EstArrivalAirport *string `json:"estArrivalAirport"`
+
+	// Callsign of the vehicle (8 chars).
+	// Can be null if no callsign has been received.
+	// If the vehicle transmits multiple callsigns during the flight,
+	// we take the one seen most frequently.
+	Callsign *string `json:"callsign"`
+
+	// Horizontal distance of the last received airborne position
+	// to the estimated departure airport in meters.
+	EstDepartureAirportHorizDistance int64 `json:"estDepartureAirportHorizDistance"`
+
+	// Vertical distance of the last received airborne position
+	// to the estimated departure airport in meters.
+	EstDepartureAirportVertDistance int64 `json:"estDepartureAirportVertDistance"`
+
+	// Horizontal distance of the last received airborne position
+	// to the estimated arrival airport in meters.
+	EstArrivalAirportHorizDistance int64 `json:"estArrivalAirportHorizDistance"`
+
+	// Vertical distance of the last received airborne position to
+	// the estimated arrival airport in meters.
+	EstArrivalAirportVertDistance int64 `json:"estArrivalAirportVertDistance"`
+
+	// Number of other possible departure airports.
+	// These are airports in short distance to estDepartureAirport.
+	DepartureAirportCandidatesCount int `json:"departureAirportCandidatesCount"`
+
+	// Number of other possible departure airports.
+	ArrivalAirportCandidatesCount int `json:"arrivalAirportCandidatesCount"`
 }
 
 type BoundingBoxOptions struct {
