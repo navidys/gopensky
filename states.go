@@ -4,8 +4,6 @@ import (
 	"context"
 	"fmt"
 	"net/url"
-
-	"github.com/rs/zerolog/log"
 )
 
 // Retrieve state vectors for a given time. If time = 0 the most recent ones are taken.
@@ -41,9 +39,7 @@ func GetStates(ctx context.Context, time int64, icao24 []string,
 	for _, st := range statesRep.States {
 		stvec, err := decodeRawStateVector(st)
 		if err != nil {
-			log.Error().Msgf("cannot decode received data: %v", err)
-
-			continue
+			return nil, fmt.Errorf("decode state vector: %w", err)
 		}
 
 		if stvec != nil {
