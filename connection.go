@@ -9,8 +9,6 @@ import (
 	"net"
 	"net/http"
 	"net/url"
-
-	"github.com/rs/zerolog/log"
 )
 
 const (
@@ -82,7 +80,6 @@ func (c *Connection) doGetRequest(ctx context.Context, httpBody io.Reader,
 	if len(queryParams) > 0 {
 		params := queryParams.Encode()
 		requestURL = fmt.Sprintf("%s?%s", requestURL, params)
-		log.Debug().Msgf("do request params: %s", params)
 	}
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, requestURL, httpBody)
@@ -91,11 +88,8 @@ func (c *Connection) doGetRequest(ctx context.Context, httpBody io.Reader,
 	}
 
 	if c.auth != "" {
-		log.Debug().Msg("setting authorization")
 		req.Header.Add("Authorization", "Basic "+c.auth)
 	}
-
-	log.Debug().Msgf("do get request: %s", req.URL)
 
 	response, err := c.client.Do(req) //nolint:bodyclose
 
@@ -129,8 +123,6 @@ func (h apiResponse) processWithError(unmarshalInto interface{}) error {
 	}
 
 	if h.isSuccess() || h.isRedirection() {
-		log.Debug().Msg("process response (success or redirection)")
-
 		if unmarshalInto != nil {
 			if err := json.Unmarshal(data, unmarshalInto); err != nil {
 				return fmt.Errorf("unmarshalling into %#v, data %q: %w", unmarshalInto, string(data), err)
@@ -143,12 +135,8 @@ func (h apiResponse) processWithError(unmarshalInto interface{}) error {
 	}
 
 	if h.isInformational() {
-		log.Debug().Msg("process response (information)")
-
 		return nil
 	}
-
-	log.Debug().Msg("process response (error)")
 
 	return handleError(h.Response.StatusCode, data)
 }
