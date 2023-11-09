@@ -34,6 +34,7 @@ import "github.com/navidys/gopensky"
 | GetStates |  retrieve state vectors for a given time.
 | GetArrivalsByAirport | retrieves flights for a certain airport which arrived within a given time interval.
 | GetDeparturesByAirport | retrieves flights for a certain airport which departed within a given time interval.
+| GetFlightsByInterval | retrieves flights for a certain time interval.
 
 ## Examples
 

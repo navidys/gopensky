@@ -72,8 +72,7 @@ func getClient(ctx context.Context) (*Connection, error) {
 	return nil, fmt.Errorf("%w %s", errContextKey, clientKey)
 }
 
-func (c *Connection) doGetRequest(ctx context.Context, httpBody io.Reader,
-	endpoint string, queryParams url.Values,
+func (c *Connection) doGetRequest(ctx context.Context, endpoint string, queryParams url.Values,
 ) (*apiResponse, error) {
 	requestURL := fmt.Sprintf("%s/%s", c.uri, endpoint)
 
@@ -82,7 +81,7 @@ func (c *Connection) doGetRequest(ctx context.Context, httpBody io.Reader,
 		requestURL = fmt.Sprintf("%s?%s", requestURL, params)
 	}
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, requestURL, httpBody)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, requestURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("new request: %w", err)
 	}

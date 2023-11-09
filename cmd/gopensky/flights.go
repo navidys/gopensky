@@ -11,14 +11,14 @@ import (
 )
 
 //nolint:gochecknoglobals
-var departuresCommand = &cobra.Command{
-	Use:     "departures",
-	Short:   "Retrieve flights for a certain airport which departed within a given time interval",
-	Run:     runDepartures,
-	PreRunE: preRunFlightArrivalsDepartures,
+var flightsCommand = &cobra.Command{
+	Use:     "flights",
+	Short:   "Retrieve flights for a certain time interval ",
+	Run:     runFlights,
+	PreRunE: preRunFlights,
 }
 
-func runDepartures(cmd *cobra.Command, args []string) {
+func runFlights(cmd *cobra.Command, args []string) {
 	conn, err := gopensky.NewConnection(context.Background(), cmdUsername, cmdPassword)
 	if err != nil {
 		log.Error().Msgf("%v", err)
@@ -26,7 +26,7 @@ func runDepartures(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	flights, err := gopensky.GetDeparturesByAirport(conn, cmdAirport, cmdBeginTime, cmdEndTime)
+	flights, err := gopensky.GetFlightsByInterval(conn, cmdBeginTime, cmdEndTime)
 	if err != nil {
 		log.Error().Msgf("%v", err)
 

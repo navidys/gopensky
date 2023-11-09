@@ -24,6 +24,14 @@ func preRunFlightArrivalsDepartures(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
+func preRunFlights(cmd *cobra.Command, args []string) error {
+	if cmdBeginTime <= 0 || cmdEndTime <= 0 {
+		return gopensky.ErrInvalidUnixTime
+	}
+
+	return nil
+}
+
 func printFlightTable(flights []gopensky.FlighData) { //nolint:funlen
 	writer := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', 0)
 
