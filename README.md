@@ -67,7 +67,7 @@ func main() {
 			depAirport = *flightData.EstDepartureAirport
 		}
 
-		fmt.Printf("ICAO24: %s, Departure Airport: %4s, LastSeen: %s\n",
+		fmt.Printf("ICAO24: %s, Departed Airport: %4s, LastSeen: %s\n",
 			flightData.Icao24,
 			depAirport,
 			time.Unix(flightData.LastSeen, 0),
@@ -79,18 +79,18 @@ func main() {
 output:
 
 ```
-ICAO24: 406544, Departure Airport: EGPH, LastSeen: 2023-10-10 07:33:07 +1100 AEDT
-ICAO24: 896180, Departure Airport:     , LastSeen: 2023-10-10 05:07:35 +1100 AEDT
-ICAO24: 738065, Departure Airport: LLBG, LastSeen: 2023-10-10 03:14:58 +1100 AEDT
-ICAO24: 4bc848, Departure Airport: LTFJ, LastSeen: 2023-10-10 01:31:15 +1100 AEDT
-ICAO24: 4891b6, Departure Airport:     , LastSeen: 2023-10-09 20:52:38 +1100 AEDT
-ICAO24: 39856a, Departure Airport: LFBO, LastSeen: 2023-10-09 20:45:12 +1100 AEDT
-ICAO24: 4ba9c9, Departure Airport: LTFM, LastSeen: 2023-10-09 18:52:45 +1100 AEDT
-ICAO24: 738075, Departure Airport: LFPG, LastSeen: 2023-10-09 16:03:10 +1100 AEDT
-ICAO24: 39e68b, Departure Airport: ESSA, LastSeen: 2023-10-09 07:23:04 +1100 AEDT
-ICAO24: 01020a, Departure Airport:     , LastSeen: 2023-10-09 05:46:24 +1100 AEDT
-ICAO24: 39e698, Departure Airport: LOWW, LastSeen: 2023-10-09 04:51:45 +1100 AEDT
-ICAO24: 398569, Departure Airport: LJLJ, LastSeen: 2023-10-09 02:03:00 +1100 AEDT
+ICAO24: 406544, Departed Airport: EGPH, LastSeen: 2023-10-10 07:33:07 +1100 AEDT
+ICAO24: 896180, Departed Airport:     , LastSeen: 2023-10-10 05:07:35 +1100 AEDT
+ICAO24: 738065, Departed Airport: LLBG, LastSeen: 2023-10-10 03:14:58 +1100 AEDT
+ICAO24: 4bc848, Departed Airport: LTFJ, LastSeen: 2023-10-10 01:31:15 +1100 AEDT
+ICAO24: 4891b6, Departed Airport:     , LastSeen: 2023-10-09 20:52:38 +1100 AEDT
+ICAO24: 39856a, Departed Airport: LFBO, LastSeen: 2023-10-09 20:45:12 +1100 AEDT
+ICAO24: 4ba9c9, Departed Airport: LTFM, LastSeen: 2023-10-09 18:52:45 +1100 AEDT
+ICAO24: 738075, Departed Airport: LFPG, LastSeen: 2023-10-09 16:03:10 +1100 AEDT
+ICAO24: 39e68b, Departed Airport: ESSA, LastSeen: 2023-10-09 07:23:04 +1100 AEDT
+ICAO24: 01020a, Departed Airport:     , LastSeen: 2023-10-09 05:46:24 +1100 AEDT
+ICAO24: 39e698, Departed Airport: LOWW, LastSeen: 2023-10-09 04:51:45 +1100 AEDT
+ICAO24: 398569, Departed Airport: LJLJ, LastSeen: 2023-10-09 02:03:00 +1100 AEDT
 ```
 
 ## License

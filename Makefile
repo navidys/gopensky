@@ -38,7 +38,7 @@ docs: ## Generates html documents
 #=================================================
 
 .PHONY: install.tools
-install.tools: .install.pre-commit .install.codespell .install.golangci-lint ## Install needed tools
+install.tools: .install.pre-commit .install.codespell .install.golangci-lint .install.sphinx-build## Install needed tools
 
 .PHONY: .install.codespell
 .install.codespell:
@@ -53,6 +53,10 @@ install.tools: .install.pre-commit .install.codespell .install.golangci-lint ## 
 .PHONY: .install.golangci-lint
 .install.golangci-lint:
 	VERSION=1.51.1 ./hack/install_golangci.sh
+
+.PHONY: .install.sphinx-build
+.install.sphinx-build:
+	sudo ${PKG_MANAGER} -y install python-sphinx python-sphinx_rtd_theme
 
 #=================================================
 # Linting/Formatting/Code Validation targets

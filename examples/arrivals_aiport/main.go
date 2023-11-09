@@ -28,13 +28,22 @@ func main() {
 	}
 
 	for _, flightData := range flightsData {
-		var depAirport string
+		var (
+			depAirport string
+			callSign   string
+		)
+
 		if flightData.EstDepartureAirport != nil {
 			depAirport = *flightData.EstDepartureAirport
 		}
 
-		fmt.Printf("ICAO24: %s, Departure Airport: %4s, LastSeen: %s\n",
+		if flightData.Callsign != nil {
+			callSign = *flightData.Callsign
+		}
+
+		fmt.Printf("ICAO24: %s, callSign: %8s, Departed Airport: %4s, LastSeen: %s\n",
 			flightData.Icao24,
+			callSign,
 			depAirport,
 			time.Unix(flightData.LastSeen, 0),
 		)
