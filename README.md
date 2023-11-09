@@ -1,4 +1,5 @@
 # Go OpenSKY Network API
+![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/navidys/gopensky)](https://pkg.go.dev/github.com/navidys/gopensky)
 [![Go Report](https://goreportcard.com/badge/github.com/navidys/gopensky)](https://goreportcard.com/report/github.com/navidys/gopensky)
 
@@ -29,16 +30,16 @@ import "github.com/navidys/gopensky"
 
 ## Features
 
-| Name      | Description |
+| Function  | Description |
 | --------- | ----------- |
-| GetStates |  retrieve state vectors for a given time.
-| GetArrivalsByAirport | retrieves flights for a certain airport which arrived within a given time interval.
-| GetDeparturesByAirport | retrieves flights for a certain airport which departed within a given time interval.
-| GetFlightsByInterval | retrieves flights for a certain time interval.
+| GetStates |  Retrieve state vectors for a given time.
+| GetArrivalsByAirport | Retrieves flights for a certain airport which arrived within a given time interval.
+| GetDeparturesByAirport | Retrieves flights for a certain airport which departed within a given time interval.
+| GetFlightsByInterval | Retrieves flights for a certain time interval.
 
 ## Examples
 
-Here is an example program of retrieving flights for a Charles de Gaulle airport between Sunday October 08, 2023 08:55:42 and Tuesday October 10, 2023 08:55:42.
+Here is an example program of retrieving flights between SMonday, October 9, 2023 6:19:28 and Monday, October 9, 2023 7:19:28.
 
 Visit [Golang OpenSky Network API](https://navidys.github.io/gopensky/) for more examples.
 
@@ -61,26 +62,34 @@ func main() {
 		os.Exit(1)
 	}
 
-	// retrieve arrivals flights of:
-	// airport: LFPG (Charles de Gaulle)
-	// being time: 1696755342 (Sunday October 08, 2023 08:55:42 UTC)
-	// end time: 1696928142 (Tuesday October 10, 2023 08:55:42 UTC)
+	// retrieve flights
+	// being time: 1696832368 (Monday, October 9, 2023 6:19:28)
+	// end time: 1696835968 (Monday, October 9, 2023 7:19:28)
 
-	flightsData, err := gopensky.GetArrivalsByAirport(conn, "LFPG", 1696755342, 1696928142)
+	flightsData, err := gopensky.GetFlightsByInterval(conn, 1696832368, 1696835968)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(2)
 	}
 
 	for _, flightData := range flightsData {
-		var depAirport string
+		var (
+			departedAirport string
+			arrivalAriport  string
+		)
+
 		if flightData.EstDepartureAirport != nil {
-			depAirport = *flightData.EstDepartureAirport
+			departedAirport = *flightData.EstDepartureAirport
 		}
 
-		fmt.Printf("ICAO24: %s, Departed Airport: %4s, LastSeen: %s\n",
+		if flightData.EstArrivalAirport != nil {
+			arrivalAriport = *flightData.EstArrivalAirport
+		}
+
+		fmt.Printf("ICAO24: %s, Departed: %4s, Arrival: %4s, LastSeen: %s\n",
 			flightData.Icao24,
-			depAirport,
+			departedAirport,
+			arrivalAriport,
 			time.Unix(flightData.LastSeen, 0),
 		)
 	}
@@ -90,18 +99,21 @@ func main() {
 output:
 
 ```
-ICAO24: 406544, Departed Airport: EGPH, LastSeen: 2023-10-10 07:33:07 +1100 AEDT
-ICAO24: 896180, Departed Airport:     , LastSeen: 2023-10-10 05:07:35 +1100 AEDT
-ICAO24: 738065, Departed Airport: LLBG, LastSeen: 2023-10-10 03:14:58 +1100 AEDT
-ICAO24: 4bc848, Departed Airport: LTFJ, LastSeen: 2023-10-10 01:31:15 +1100 AEDT
-ICAO24: 4891b6, Departed Airport:     , LastSeen: 2023-10-09 20:52:38 +1100 AEDT
-ICAO24: 39856a, Departed Airport: LFBO, LastSeen: 2023-10-09 20:45:12 +1100 AEDT
-ICAO24: 4ba9c9, Departed Airport: LTFM, LastSeen: 2023-10-09 18:52:45 +1100 AEDT
-ICAO24: 738075, Departed Airport: LFPG, LastSeen: 2023-10-09 16:03:10 +1100 AEDT
-ICAO24: 39e68b, Departed Airport: ESSA, LastSeen: 2023-10-09 07:23:04 +1100 AEDT
-ICAO24: 01020a, Departed Airport:     , LastSeen: 2023-10-09 05:46:24 +1100 AEDT
-ICAO24: 39e698, Departed Airport: LOWW, LastSeen: 2023-10-09 04:51:45 +1100 AEDT
-ICAO24: 398569, Departed Airport: LJLJ, LastSeen: 2023-10-09 02:03:00 +1100 AEDT
+ICAO24: 008833, Departed: FAGC, Arrival: FAFF, LastSeen: 2023-10-09 17:24:52 +1100 AEDT
+ICAO24: 008de4, Departed: FAOR, Arrival:     , LastSeen: 2023-10-09 17:48:42 +1100 AEDT
+ICAO24: 008dea, Departed: FAOR, Arrival:     , LastSeen: 2023-10-09 17:16:38 +1100 AEDT
+ICAO24: 008df9, Departed: FAOR, Arrival: FANC, LastSeen: 2023-10-09 17:37:19 +1100 AEDT
+ICAO24: 009893, Departed: FAOR, Arrival: FABS, LastSeen: 2023-10-09 18:09:45 +1100 AEDT
+ICAO24: 00af2e, Departed: FAOR, Arrival: FANC, LastSeen: 2023-10-09 17:38:33 +1100 AEDT
+ICAO24: 00b097, Departed: FAOR, Arrival: FAWN, LastSeen: 2023-10-09 17:12:13 +1100 AEDT
+ICAO24: 0100e4, Departed:     , Arrival:     , LastSeen: 2023-10-09 17:20:43 +1100 AEDT
+ICAO24: 01010b, Departed:     , Arrival:     , LastSeen: 2023-10-09 17:27:32 +1100 AEDT
+ICAO24: 0101ba, Departed:     , Arrival: HE13, LastSeen: 2023-10-09 17:37:38 +1100 AEDT
+ICAO24: 0101cd, Departed:     , Arrival: HE28, LastSeen: 2023-10-09 17:54:49 +1100 AEDT
+ICAO24: 01022e, Departed: EDDK, Arrival:     , LastSeen: 2023-10-09 18:19:19 +1100 AEDT
+...
+...
+...
 ```
 
 ## License
