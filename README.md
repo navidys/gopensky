@@ -27,6 +27,16 @@ Next, include gopensky in you application:
 import "github.com/navidys/gopensky"
 ```
 
+## Features
+
+| Name      | Description |
+| --------- | ----------- |
+| GetStates |  retrieve state vectors for a given time.
+| GetArrivalsByAirport | retrieves flights for a certain airport which arrived within a given time interval.
+| GetDeparturesByAirport | retrieves flights for a certain airport which departed within a given time interval.
+
+## Examples
+
 Here is an example program of retrieving flights for a Charles de Gaulle airport between Sunday October 08, 2023 08:55:42 and Tuesday October 10, 2023 08:55:42.
 
 Visit [Golang OpenSky Network API](https://navidys.github.io/gopensky/) for more examples.
