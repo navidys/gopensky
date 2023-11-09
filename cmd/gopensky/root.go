@@ -102,7 +102,7 @@ func init() { //nolint:gochecknoinits
 	statesCommand.Flags().Float64SliceVar(&cmdStatesBoundingBox, "box", nil,
 		"query a certain area defined by a bounding box of WGS84 coordinates (lamin,lomin,lamax,lomax)")
 
-	// flights command
+	// flights arrivals command
 	arrivalsCommand.Flags().StringVarP(&cmdAirport, "airport", "a", cmdAirport,
 		"ICAO identifier for the airport")
 
@@ -112,6 +112,17 @@ func init() { //nolint:gochecknoinits
 	arrivalsCommand.Flags().Int64VarP(&cmdEndTime, "end", "e", cmdEndTime,
 		"end of time interval to retrieve flights for as Unix time (seconds since epoch)")
 
+	// flights departures command
+	departuresCommand.Flags().StringVarP(&cmdAirport, "airport", "a", cmdAirport,
+		"ICAO identifier for the airport")
+
+	departuresCommand.Flags().Int64VarP(&cmdBeginTime, "being", "b", cmdBeginTime,
+		"start of time interval to retrieve flights for as Unix time (seconds since epoch)")
+
+	departuresCommand.Flags().Int64VarP(&cmdEndTime, "end", "e", cmdEndTime,
+		"end of time interval to retrieve flights for as Unix time (seconds since epoch)")
+
 	rootCmd.AddCommand(statesCommand)
 	rootCmd.AddCommand(arrivalsCommand)
+	rootCmd.AddCommand(departuresCommand)
 }
