@@ -23,7 +23,7 @@ func GetStates(ctx context.Context, time int64, icao24 []string,
 
 	requestParams := getStateRequestParams(time, icao24, bBox, extended)
 
-	response, err := conn.doGetRequest(ctx, nil, "/states/all", requestParams)
+	response, err := conn.doGetRequest(ctx, "/states/all", requestParams)
 	if err != nil {
 		return nil, fmt.Errorf("do request: %w", err)
 	}
