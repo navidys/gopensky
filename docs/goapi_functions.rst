@@ -70,7 +70,7 @@ func :ref:`GetArrivalsByAirport <FUNC_GET_ARRIVALS_BY_AIRPORT>`
 .. _FUNC_GET_DEPARTURES_BY_AIRPORT:
 
 func :ref:`GetDeparturesByAirport <FUNC_GET_DEPARTURES_BY_AIRPORT>`
-----------------------------------------------------------------
+--------------------------------------------------------------------
 
     Retrieves flights for a certain airport which departed within a given time interval [being, end].
 
@@ -79,6 +79,29 @@ func :ref:`GetDeparturesByAirport <FUNC_GET_DEPARTURES_BY_AIRPORT>`
     .. code-block:: go
 
         func GetDeparturesByAirport(ctx context.Context, airport string, begin int64, end int64) ([]FlightData, error)
+
+
+    :Parameters:
+        - **ctx** (`context.Context <https://pkg.go.dev/context#Context>`_) - connection context.
+        - **airport** (string) - ICAO identifier for the airport.
+        - **begin** (int64) - Start of time interval to retrieve flights for as Unix time (seconds since epoch).
+        - **end** (int64)  - End of time interval to retrieve flights for as Unix time (seconds since epoch).
+
+    :Returns: :ref:`[]FlightData<TYPE_FLIGHT_DATA>`, error
+
+
+.. _FUNC_GET_FLIGHTS_BY_INTERVAL:
+
+func :ref:`GetFlightsByInterval <FUNC_GET_FLIGHTS_BY_INTERVAL>`
+--------------------------------------------------------------------
+
+    Retrieves flights within a given time interval [being, end].
+
+    The given time interval must not be larger than two hours!
+
+    .. code-block:: go
+
+        func GetFlightsByInterval(ctx context.Context, begin int64, end int64) ([]FlightData, error)
 
 
     :Parameters:

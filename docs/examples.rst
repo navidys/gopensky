@@ -64,8 +64,6 @@ output:
     ICAO24: 440da1, Longitude: 17.950300, Latitude: 59.645800, Origin Country: Austria
     ICAO24: ab6fdd, Longitude: -96.840200, Latitude: 38.359400, Origin Country: United States
     ....
-    ....
-    ....
 
 
 Arrivals by Airport
@@ -145,6 +143,7 @@ output:
     ICAO24: 39e698, callSign: AFR94RP , Departed Airport: LOWW, LastSeen: 2023-10-09 04:51:45 +1100 AEDT
     ICAO24: 398569, callSign: AFR37LV , Departed Airport: LJLJ, LastSeen: 2023-10-09 02:03:00 +1100 AEDT
 
+
 Departures by Airport
 ----------------------
 Example of retrieving flights for a certain airport which departed within a given time interval:
@@ -195,7 +194,6 @@ Example of retrieving flights for a certain airport which departed within a give
 
 output:
 
-
 .. code-block:: bash
 
   [
@@ -228,6 +226,85 @@ output:
           "arrivalAirportCandidatesCount": 10
       },
       ...
-      ...
-      ...
     }
+
+
+Flights in Time Interval
+-------------------------
+Example of retrieving flights within a given time interval:
+
+.. code-block:: go
+
+    package main
+
+    import (
+        "context"
+        "fmt"
+        "os"
+        "time"
+
+        "github.com/navidys/gopensky"
+    )
+
+    func main() {
+        conn, err := gopensky.NewConnection(context.Background(), "", "")
+        if err != nil {
+            fmt.Println(err)
+            os.Exit(1)
+        }
+
+        // retrieve flights
+        // being time: 1696832368 (Monday, October 9, 2023 6:19:28)
+        // end time: 1696835968 (Monday, October 9, 2023 7:19:28)
+
+        flightsData, err := gopensky.GetFlightsByInterval(conn, 1696832368, 1696835968)
+        if err != nil {
+            fmt.Println(err)
+            os.Exit(2)
+        }
+
+        for _, flightData := range flightsData {
+            var (
+                departedAirport string
+                arrivalAriport  string
+            )
+
+            if flightData.EstDepartureAirport != nil {
+                departedAirport = *flightData.EstDepartureAirport
+            }
+
+            if flightData.EstArrivalAirport != nil {
+                arrivalAriport = *flightData.EstArrivalAirport
+            }
+
+            fmt.Printf("ICAO24: %s, Departed: %4s, Arrival: %4s, LastSeen: %s\n",
+                flightData.Icao24,
+                departedAirport,
+                arrivalAriport,
+                time.Unix(flightData.LastSeen, 0),
+            )
+        }
+    }
+
+
+
+.. ::
+
+
+output:
+
+.. code-block:: bash
+
+    ICAO24: 008833, Departed: FAGC, Arrival: FAFF, LastSeen: 2023-10-09 17:24:52 +1100 AEDT
+    ICAO24: 008de4, Departed: FAOR, Arrival:     , LastSeen: 2023-10-09 17:48:42 +1100 AEDT
+    ICAO24: 008dea, Departed: FAOR, Arrival:     , LastSeen: 2023-10-09 17:16:38 +1100 AEDT
+    ICAO24: 008df9, Departed: FAOR, Arrival: FANC, LastSeen: 2023-10-09 17:37:19 +1100 AEDT
+    ICAO24: 009893, Departed: FAOR, Arrival: FABS, LastSeen: 2023-10-09 18:09:45 +1100 AEDT
+    ICAO24: 00af2e, Departed: FAOR, Arrival: FANC, LastSeen: 2023-10-09 17:38:33 +1100 AEDT
+    ICAO24: 00b097, Departed: FAOR, Arrival: FAWN, LastSeen: 2023-10-09 17:12:13 +1100 AEDT
+    ICAO24: 0100e4, Departed:     , Arrival:     , LastSeen: 2023-10-09 17:20:43 +1100 AEDT
+    ICAO24: 01010b, Departed:     , Arrival:     , LastSeen: 2023-10-09 17:27:32 +1100 AEDT
+    ICAO24: 0101ba, Departed:     , Arrival: HE13, LastSeen: 2023-10-09 17:37:38 +1100 AEDT
+    ICAO24: 0101cd, Departed:     , Arrival: HE28, LastSeen: 2023-10-09 17:54:49 +1100 AEDT
+    ICAO24: 01022e, Departed: EDDK, Arrival:     , LastSeen: 2023-10-09 18:19:19 +1100 AEDT
+    ...
