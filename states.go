@@ -7,6 +7,8 @@ import (
 )
 
 // Retrieve state vectors for a given time. If time = 0 the most recent ones are taken.
+// It is possible to query a certain area defined by a bounding box of WGS84 coordinates.
+// You can request the category of aircraft by setting extended to true.
 func GetStates(ctx context.Context, time int64, icao24 []string,
 	bBox *BoundingBoxOptions, extended bool,
 ) (*States, error) {

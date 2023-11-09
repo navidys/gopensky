@@ -1,14 +1,6 @@
 package main
 
 import (
-	"context"
-	"encoding/json"
-	"fmt"
-	"os"
-	"text/tabwriter"
-
-	"github.com/navidys/gopensky"
-	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 )
 
@@ -16,7 +8,7 @@ import (
 var statesCommand = &cobra.Command{
 	Use:     "states",
 	Short:   "retrieve state vector information",
-	Run:     runStates,
+	Run:     runStatesCommand,
 	PreRunE: preStateRun,
 }
 
@@ -28,141 +20,17 @@ func preStateRun(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-func runStates(cmd *cobra.Command, args []string) {
-	var boundingBoxOpts *gopensky.BoundingBoxOptions
+func registerStatesCommand() {
+	// states command
+	statesCommand.Flags().StringSliceVarP(&cmdIcao24List, "icao24", "i", cmdIcao24List,
+		"comma separates (,) list of unique ICAO 24-bit address of the transponder in hex string representation")
 
-	if len(cmdStatesBoundingBox) == 4 { //nolint:gomnd
-		boundingBoxOpts = &gopensky.BoundingBoxOptions{
-			Lamin: cmdStatesBoundingBox[0],
-			Lomin: cmdStatesBoundingBox[1],
-			Lamax: cmdStatesBoundingBox[2],
-			Lomax: cmdStatesBoundingBox[3],
-		}
-	}
+	statesCommand.Flags().Int64VarP(&cmdTime, "time", "t", cmdTime,
+		"the time which the state vectors in this response are associated with (current time will be used if omitted)")
 
-	conn, err := gopensky.NewConnection(context.Background(), cmdUsername, cmdPassword)
-	if err != nil {
-		log.Error().Msgf("%v", err)
+	statesCommand.Flags().BoolVarP(&cmdStatesExtended, "extended", "e", cmdStatesExtended,
+		"request the category of aircraft ")
 
-		return
-	}
-
-	states, err := gopensky.GetStates(conn, cmdTime, cmdIcao24List, boundingBoxOpts, cmdStatesExtended)
-	if err != nil {
-		log.Error().Msgf("%v", err)
-
-		return
-	}
-
-	if cmdPrintJSON {
-		jsonResult, err := json.MarshalIndent(states, "", "    ")
-		if err != nil {
-			log.Error().Msgf("%v", err)
-
-			return
-		}
-
-		fmt.Printf("%s\n", jsonResult) //nolint:forbidigo
-	} else {
-		printStatesTable(states)
-	}
-}
-
-func printStatesTable(states *gopensky.States) { //nolint:funlen
-	writer := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', 0)
-
-	header := fmt.Sprintf("\n%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s",
-		"Icao24",
-		"Callsign",
-		"OriginCountry",
-		"TimePosition",
-		"LastContact",
-		"Longitude",
-		"Latitude",
-		"BaroAltitude",
-		"OnGround",
-		"Velocity",
-		"TrueTrack",
-		"VerticalRate",
-		"Sensors",
-		"GeoAltitude",
-		"Squawk",
-		"Spi",
-		"PositionSource",
-		"Category",
-	)
-
-	if _, err := fmt.Fprintln(writer, header); err != nil {
-		log.Error().Msgf("%v", err)
-	}
-
-	floatToString := func(data *float64) string {
-		if data != nil {
-			return fmt.Sprintf("%.4f", *data)
-		}
-
-		return "<nil>"
-	}
-
-	for _, state := range states.States {
-		var (
-			callSign     = "<nil>"
-			timePosition = "<nil>"
-			sensors      = "<nil>"
-			squawk       = "<nil>"
-		)
-
-		if state.Squawk != nil {
-			squawk = *state.Squawk
-		}
-
-		geoAltitude := floatToString(state.GeoAltitude)
-		verticalRate := floatToString(state.VerticalRate)
-		trueTrack := floatToString(state.TrueTrack)
-		velocity := floatToString(state.Velocity)
-		baroAltitude := floatToString(state.BaroAltitude)
-		latitude := floatToString(state.Latitude)
-		longitude := floatToString(state.Longitude)
-
-		if state.Sensors != nil {
-			sensors = fmt.Sprintf("%v", state.Sensors)
-		}
-
-		if state.TimePosition != nil {
-			timePosition = fmt.Sprintf("%d", *state.TimePosition)
-		}
-
-		if state.Callsign != nil {
-			callSign = *state.Callsign
-		}
-
-		data := fmt.Sprintf("%s\t%s\t%s\t%s\t%d\t%s\t%s\t%s\t%v\t%s\t%s\t%s\t%s\t%s\t%s\t%v\t%d\t%d",
-			state.Icao24,
-			callSign,
-			state.OriginCountry,
-			timePosition,
-			state.LastContact,
-			longitude,
-			latitude,
-			baroAltitude,
-			state.OnGround,
-			velocity,
-			trueTrack,
-			verticalRate,
-			sensors,
-			geoAltitude,
-			squawk,
-			state.Spi,
-			state.PositionSource,
-			state.Category,
-		)
-
-		if _, err := fmt.Fprintln(writer, data); err != nil {
-			log.Error().Msgf("%v", err)
-		}
-	}
-
-	if err := writer.Flush(); err != nil {
-		log.Error().Msgf("failed to flush template: %v", err)
-	}
+	statesCommand.Flags().Float64SliceVar(&cmdStatesBoundingBox, "box", nil,
+		"query a certain area defined by a bounding box of WGS84 coordinates (lamin,lomin,lamax,lomax)")
 }

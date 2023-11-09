@@ -27,8 +27,9 @@ var (
 	errStateVecPositionSource = errors.New("state vector position source assertion failed")
 	errStateVecCategory       = errors.New("state vector category assertion failed")
 
-	ErrEmptyAirportName = errors.New("empty airport name")
-	ErrInvalidUnixTime  = errors.New("invalid unix time")
+	ErrInvalidAirportName  = errors.New("invalid airport name")
+	ErrInvalidAircraftName = errors.New("invalid aircraft name")
+	ErrInvalidUnixTime     = errors.New("invalid unix time")
 )
 
 type connectionError struct {

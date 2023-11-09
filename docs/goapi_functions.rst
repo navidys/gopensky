@@ -113,6 +113,29 @@ func :ref:`GetFlightsByInterval <FUNC_GET_FLIGHTS_BY_INTERVAL>`
     :Returns: :ref:`[]FlightData<TYPE_FLIGHT_DATA>`, error
 
 
+.. _FUNC_GET_FLIGHTS_BY_AIRCRAFT:
+
+func :ref:`GetFlightsByAircraft <FUNC_GET_FLIGHTS_BY_AIRCRAFT>`
+--------------------------------------------------------------------
+
+    Retrieves flights for a particular aircraft within a certain time interval.
+
+    The given time interval must not be larger than 30 days!
+
+    .. code-block:: go
+
+        func GetFlightsByAircraft(ctx context.Context, icao24 string, begin int64, end int64) ([]FlighData, error)
+
+
+    :Parameters:
+        - **ctx** (`context.Context <https://pkg.go.dev/context#Context>`_) - connection context.
+        - **icao24** (string) - Unique ICAO 24-bit address of the transponder in hex string representation.
+        - **begin** (int64) - Start of time interval to retrieve flights for as Unix time (seconds since epoch).
+        - **end** (int64)  - End of time interval to retrieve flights for as Unix time (seconds since epoch).
+
+    :Returns: :ref:`[]FlightData<TYPE_FLIGHT_DATA>`, error
+
+
 .. _BBOX_FUNC:
 
 func :ref:`NewBoundingBox <BBOX_FUNC>`
