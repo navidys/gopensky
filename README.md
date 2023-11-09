@@ -36,10 +36,11 @@ import "github.com/navidys/gopensky"
 | GetArrivalsByAirport | Retrieves flights for a certain airport which arrived within a given time interval.
 | GetDeparturesByAirport | Retrieves flights for a certain airport which departed within a given time interval.
 | GetFlightsByInterval | Retrieves flights for a certain time interval.
+| GetFlightsByAircraft | Retrieves flights for a particular aircraft within a certain time interval
 
 ## Examples
 
-Here is an example program of retrieving flights between SMonday, October 9, 2023 6:19:28 and Monday, October 9, 2023 7:19:28.
+Here is an example program of retrieving Elon Musk's primary private jet (he has many and one of them has the ICAO24 transponder address `a835af`) flights between Thu Aug 31 2023 23:11:04 and Fri Sep 29 2023 23:11:04.
 
 Visit [Golang OpenSky Network API](https://navidys.github.io/gopensky/) for more examples.
 
@@ -62,11 +63,12 @@ func main() {
 		os.Exit(1)
 	}
 
-	// retrieve flights
-	// being time: 1696832368 (Monday, October 9, 2023 6:19:28)
-	// end time: 1696835968 (Monday, October 9, 2023 7:19:28)
+	// Retrieve Elon Musk's primary private jet flight data, he has many and one of
+	// them has the ICAO24 transponder address a835af
+	// begin time: 1693523464 (Thu Aug 31 2023 23:11:04)
+	// end time: 1696029064 (Fri Sep 29 2023 23:11:04)
 
-	flightsData, err := gopensky.GetFlightsByInterval(conn, 1696832368, 1696835968)
+	flightsData, err := gopensky.GetFlightsByAircraft(conn, "a835af", 1693523464, 1696029064)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(2)
@@ -99,21 +101,12 @@ func main() {
 output:
 
 ```
-ICAO24: 008833, Departed: FAGC, Arrival: FAFF, LastSeen: 2023-10-09 17:24:52 +1100 AEDT
-ICAO24: 008de4, Departed: FAOR, Arrival:     , LastSeen: 2023-10-09 17:48:42 +1100 AEDT
-ICAO24: 008dea, Departed: FAOR, Arrival:     , LastSeen: 2023-10-09 17:16:38 +1100 AEDT
-ICAO24: 008df9, Departed: FAOR, Arrival: FANC, LastSeen: 2023-10-09 17:37:19 +1100 AEDT
-ICAO24: 009893, Departed: FAOR, Arrival: FABS, LastSeen: 2023-10-09 18:09:45 +1100 AEDT
-ICAO24: 00af2e, Departed: FAOR, Arrival: FANC, LastSeen: 2023-10-09 17:38:33 +1100 AEDT
-ICAO24: 00b097, Departed: FAOR, Arrival: FAWN, LastSeen: 2023-10-09 17:12:13 +1100 AEDT
-ICAO24: 0100e4, Departed:     , Arrival:     , LastSeen: 2023-10-09 17:20:43 +1100 AEDT
-ICAO24: 01010b, Departed:     , Arrival:     , LastSeen: 2023-10-09 17:27:32 +1100 AEDT
-ICAO24: 0101ba, Departed:     , Arrival: HE13, LastSeen: 2023-10-09 17:37:38 +1100 AEDT
-ICAO24: 0101cd, Departed:     , Arrival: HE28, LastSeen: 2023-10-09 17:54:49 +1100 AEDT
-ICAO24: 01022e, Departed: EDDK, Arrival:     , LastSeen: 2023-10-09 18:19:19 +1100 AEDT
-...
-...
-...
+ICAO24: a835af, Departed: KAUS, Arrival: KUVA, LastSeen: 2023-09-29 07:46:02 +1000 AEST
+ICAO24: a835af, Departed:     , Arrival: 02XS, LastSeen: 2023-09-19 10:59:04 +1000 AEST
+ICAO24: a835af, Departed:     , Arrival: KSLC, LastSeen: 2023-09-16 12:56:20 +1000 AEST
+ICAO24: a835af, Departed: KAUS, Arrival: KIAD, LastSeen: 2023-09-13 14:35:18 +1000 AEST
+ICAO24: a835af, Departed: KSJC, Arrival: 2TS2, LastSeen: 2023-09-09 18:40:39 +1000 AEST
+ICAO24: a835af, Departed: KAUS, Arrival: KSJC, LastSeen: 2023-09-08 08:20:02 +1000 AEST
 ```
 
 ## License

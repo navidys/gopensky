@@ -1,12 +1,6 @@
 package main
 
 import (
-	"context"
-	"encoding/json"
-	"fmt"
-
-	"github.com/navidys/gopensky"
-	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 )
 
@@ -14,35 +8,18 @@ import (
 var departuresCommand = &cobra.Command{
 	Use:     "departures",
 	Short:   "Retrieve flights for a certain airport which departed within a given time interval",
-	Run:     runDepartures,
+	Run:     runFlightsCommand,
 	PreRunE: preRunFlightArrivalsDepartures,
 }
 
-func runDepartures(cmd *cobra.Command, args []string) {
-	conn, err := gopensky.NewConnection(context.Background(), cmdUsername, cmdPassword)
-	if err != nil {
-		log.Error().Msgf("%v", err)
+func registerDeparturesCommand() {
+	// departures command
+	departuresCommand.Flags().StringVarP(&cmdAirport, "airport", "a", cmdAirport,
+		"ICAO identifier for the airport")
 
-		return
-	}
+	departuresCommand.Flags().Int64VarP(&cmdBeginTime, "being", "b", cmdBeginTime,
+		"start of time interval to retrieve flights for as Unix time (seconds since epoch)")
 
-	flights, err := gopensky.GetDeparturesByAirport(conn, cmdAirport, cmdBeginTime, cmdEndTime)
-	if err != nil {
-		log.Error().Msgf("%v", err)
-
-		return
-	}
-
-	if cmdPrintJSON {
-		jsonResult, err := json.MarshalIndent(flights, "", "    ")
-		if err != nil {
-			log.Error().Msgf("%v", err)
-
-			return
-		}
-
-		fmt.Printf("%s\n", jsonResult) //nolint:forbidigo
-	} else {
-		printFlightTable(flights)
-	}
+	departuresCommand.Flags().Int64VarP(&cmdEndTime, "end", "e", cmdEndTime,
+		"end of time interval to retrieve flights for as Unix time (seconds since epoch)")
 }

@@ -308,3 +308,78 @@ output:
     ICAO24: 0101cd, Departed:     , Arrival: HE28, LastSeen: 2023-10-09 17:54:49 +1100 AEDT
     ICAO24: 01022e, Departed: EDDK, Arrival:     , LastSeen: 2023-10-09 18:19:19 +1100 AEDT
     ...
+
+
+Flights by Aircraft
+-------------------------
+Example retrieving Elon Musk's primary private jet flight data (he has many and one of
+them has the ICAO24 transponder address a835af) between Thu Aug 31 2023 23:11:04 and Fri Sep 29 2023 23:11:04
+
+.. code-block:: go
+
+    package main
+
+    import (
+        "context"
+        "fmt"
+        "os"
+        "time"
+
+        "github.com/navidys/gopensky"
+    )
+
+    func main() {
+        conn, err := gopensky.NewConnection(context.Background(), "", "")
+        if err != nil {
+            fmt.Println(err)
+            os.Exit(1)
+        }
+
+        // Retrieve Elon Musk's primary private jet flight data, he has many and one of
+        // them has the ICAO24 transponder address a835af
+        // begin time: 1693523464 (Thu Aug 31 2023 23:11:04)
+        // end time: 1696029064 (Fri Sep 29 2023 23:11:04)
+
+        flightsData, err := gopensky.GetFlightsByAircraft(conn, "a835af", 1693523464, 1696029064)
+        if err != nil {
+            fmt.Println(err)
+            os.Exit(2)
+        }
+
+        for _, flightData := range flightsData {
+            var (
+                departedAirport string
+                arrivalAriport  string
+            )
+
+            if flightData.EstDepartureAirport != nil {
+                departedAirport = *flightData.EstDepartureAirport
+            }
+
+            if flightData.EstArrivalAirport != nil {
+                arrivalAriport = *flightData.EstArrivalAirport
+            }
+
+            fmt.Printf("ICAO24: %s, Departed: %4s, Arrival: %4s, LastSeen: %s\n",
+                flightData.Icao24,
+                departedAirport,
+                arrivalAriport,
+                time.Unix(flightData.LastSeen, 0),
+            )
+        }
+    }
+
+
+.. ::
+
+
+output:
+
+.. code-block:: bash
+
+    ICAO24: a835af, Departed: KAUS, Arrival: KUVA, LastSeen: 2023-09-29 07:46:02 +1000 AEST
+    ICAO24: a835af, Departed:     , Arrival: 02XS, LastSeen: 2023-09-19 10:59:04 +1000 AEST
+    ICAO24: a835af, Departed:     , Arrival: KSLC, LastSeen: 2023-09-16 12:56:20 +1000 AEST
+    ICAO24: a835af, Departed: KAUS, Arrival: KIAD, LastSeen: 2023-09-13 14:35:18 +1000 AEST
+    ICAO24: a835af, Departed: KSJC, Arrival: 2TS2, LastSeen: 2023-09-09 18:40:39 +1000 AEST
+    ICAO24: a835af, Departed: KAUS, Arrival: KSJC, LastSeen: 2023-09-08 08:20:02 +1000 AEST
