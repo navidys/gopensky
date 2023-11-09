@@ -47,33 +47,41 @@ func runArrivals(cmd *cobra.Command, args []string) {
 
 		fmt.Printf("%s\n", jsonResult) //nolint:forbidigo
 	} else {
-		printArrivalsTemplate(flights)
+		printArrivalsTable(flights)
 	}
 }
 
-func printArrivalsTemplate(flights []gopensky.FlighData) {
+func printArrivalsTable(flights []gopensky.FlighData) { //nolint:funlen
 	writer := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', 0)
 
-	header := fmt.Sprintf("\n%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s",
-		"Icao24",
-		"FirstSeen",
-		"LastSeen",
-		"EstDepartureAirp",
-		"EstArrivalAirp",
-		"Callsign",
-		"EstDepAirpHorizDist",
-		"EstDepAirpVertDist",
-		"EstArrAirpHorizDist",
-		"EstArrAirpVertDist",
-		"DepAirportCandCount",
-		"ArrAirportCandCount",
-	)
+	info := []string{
+		"", // just to print a new line
+		"EDA   = EstDepartureAirport",
+		"EAA   = EstArrivalAirport",
+		"EDAHD = EstDepartureAirportHorizDistance",
+		"EDAVD = EstDepartureAirportVertDistance",
+		"EAAHD = EstArrivalAirportHorizDistance",
+		"EAAVD = EstArrivalAirportVertDistance",
+		"DACC  = DepartureAirportCandidatesCount",
+		"AACC  = ArrivalAirportCandidatesCount",
+		"", // just to print a new line
+	}
 
-	fmt.Fprintln(writer, header)
+	if _, err := fmt.Fprintln(os.Stdout, strings.Join(info, "\n")); err != nil {
+		log.Error().Msgf("%v", err)
+	}
+
+	header := fmt.Sprintf("%s\t%s\t%s\t%8s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s",
+		"Icao24", "EDA", "EAA", "Callsign", "EDAHD", "EDAVD",
+		"EAAHD", "EAAVD", "DACC", "AACC", "FirstSeen", "LastSeen")
+
+	if _, err := fmt.Fprintln(writer, header); err != nil {
+		log.Error().Msgf("%v", err)
+	}
 
 	for _, flightData := range flights {
-		firstSeen := time.Unix(flightData.FirstSeen, 0).Format("2023-10-09 09:52:38")
-		lastSeen := time.Unix(flightData.LastSeen, 0).Format("2023-10-09 09:52:38")
+		firstSeen := time.Unix(flightData.FirstSeen, 0).UTC()
+		lastSeen := time.Unix(flightData.LastSeen, 0).UTC()
 		estDepartureAirport := ""
 		estArrivalAirport := ""
 		callsign := ""
@@ -90,10 +98,8 @@ func printArrivalsTemplate(flights []gopensky.FlighData) {
 			estDepartureAirport = *flightData.Callsign
 		}
 
-		data := fmt.Sprintf("\n%s\t%s\t%s\t%s\t%s\t%s\t%d\t%d\t%d\t%d\t%d\t%d",
+		data := fmt.Sprintf("%s\t%s\t%s\t%s\t%d\t%d\t%d\t%d\t%d\t%d\t%s\t%s",
 			flightData.Icao24,
-			firstSeen,
-			lastSeen,
 			estDepartureAirport,
 			estArrivalAirport,
 			callsign,
@@ -103,9 +109,17 @@ func printArrivalsTemplate(flights []gopensky.FlighData) {
 			flightData.EstArrivalAirportVertDistance,
 			flightData.DepartureAirportCandidatesCount,
 			flightData.ArrivalAirportCandidatesCount,
+			firstSeen,
+			lastSeen,
 		)
 
-		fmt.Fprintln(writer, data)
+		if _, err := fmt.Fprintln(writer, data); err != nil {
+			log.Error().Msgf("%v", err)
+		}
+	}
+
+	if err := writer.Flush(); err != nil {
+		log.Error().Msgf("failed to flush template: %v", err)
 	}
 }
 

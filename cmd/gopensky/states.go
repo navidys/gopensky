@@ -64,11 +64,11 @@ func runStates(cmd *cobra.Command, args []string) {
 
 		fmt.Printf("%s\n", jsonResult) //nolint:forbidigo
 	} else {
-		printStatesTemplate(states)
+		printStatesTable(states)
 	}
 }
 
-func printStatesTemplate(states *gopensky.States) { //nolint:funlen
+func printStatesTable(states *gopensky.States) { //nolint:funlen
 	writer := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', 0)
 
 	header := fmt.Sprintf("\n%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s",
@@ -92,7 +92,9 @@ func printStatesTemplate(states *gopensky.States) { //nolint:funlen
 		"Category",
 	)
 
-	fmt.Fprintln(writer, header)
+	if _, err := fmt.Fprintln(writer, header); err != nil {
+		log.Error().Msgf("%v", err)
+	}
 
 	floatToString := func(data *float64) string {
 		if data != nil {
@@ -155,7 +157,9 @@ func printStatesTemplate(states *gopensky.States) { //nolint:funlen
 			state.Category,
 		)
 
-		fmt.Fprintln(writer, data)
+		if _, err := fmt.Fprintln(writer, data); err != nil {
+			log.Error().Msgf("%v", err)
+		}
 	}
 
 	if err := writer.Flush(); err != nil {
