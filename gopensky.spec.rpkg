@@ -60,5 +60,5 @@ install -p ./bin/%{name} %{buildroot}%{_bindir}
 
 
 %changelog
-* Tue Nov 07 2022 Navid Yaghoobi <navidys@fedoraproject.org> 0.1.0-1
+* Sat Nov 11 2023 Navid Yaghoobi <navidys@fedoraproject.org> 0.1.0-1
 - Initial release
