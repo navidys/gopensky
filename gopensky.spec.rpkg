@@ -11,8 +11,8 @@
 %global git0 https://%{import_path}
 
 Name: gopensky
-Version: 0.1.0
-Release: 1%{?dist}
+Version: 0.2.0
+Release: dev.1%{?dist}
 Summary: Query OpenSky Network live's API and retrieve live airspace information (ADS-B and Mode S data).
 License: ASL 2.0
 URL: %{git0}
@@ -60,5 +60,8 @@ install -p ./bin/%{name} %{buildroot}%{_bindir}
 
 
 %changelog
+* Sat Nov 11 2023 Navid Yaghoobi <navidys@fedoraproject.org> 0.2.0-dev-1
+
+
 * Sat Nov 11 2023 Navid Yaghoobi <navidys@fedoraproject.org> 0.1.0-1
 - Initial release
