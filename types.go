@@ -175,6 +175,14 @@ type FlighData struct {
 	ArrivalAirportCandidatesCount int `json:"arrivalAirportCandidatesCount"`
 }
 
+type FlightTrackResponse struct {
+	Icao24    string        `json:"icao24"`
+	StartTime float64       `json:"startTime"`
+	EndTime   float64       `json:"endTime"`
+	Callsign  *string       `json:"callsign"`
+	Path      []interface{} `json:"path"`
+}
+
 type FlightTrack struct {
 	// Unique ICAO 24-bit address of the transponder in hex string representation.
 	Icao24 string `json:"icao24"`

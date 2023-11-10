@@ -98,4 +98,31 @@ func runFlightsCommand(cmd *cobra.Command, args []string) {
 }
 
 func runTracksCommand(cmd *cobra.Command, args []string) {
+	conn, err := gopensky.NewConnection(context.Background(), cmdUsername, cmdPassword)
+	if err != nil {
+		log.Error().Msgf("%v", err)
+
+		return
+	}
+
+	flightTrack, err := gopensky.GetTrackByAircraft(conn, cmdAircraft, cmdTime)
+	if err != nil {
+		log.Error().Msgf("%v", err)
+
+		return
+	}
+
+	if cmdPrintJSON {
+		jsonResult, err := json.MarshalIndent(flightTrack, "", "    ")
+		if err != nil {
+			log.Error().Msgf("%v", err)
+
+			return
+		}
+
+		fmt.Printf("%s\n", jsonResult) //nolint:forbidigo
+	} else {
+		fmt.Println("table")
+		// printStatesTable(states)
+	}
 }
