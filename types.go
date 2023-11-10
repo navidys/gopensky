@@ -57,15 +57,15 @@ type StateVector struct {
 	Callsign *string `json:"callsign"`
 
 	// Country name inferred from the ICAO 24-bit address.
-	OriginCountry string `json:"origin_country"`
+	OriginCountry string `json:"originCountry"`
 
 	// Unix timestamp (seconds) for the last position update.
 	// Can be nil if no position report was received by OpenSky within the past 15s.
-	TimePosition *int64 `json:"time_position"`
+	TimePosition *int64 `json:"timePosition"`
 
 	// Unix timestamp (seconds) for the last update in general.
 	//  This field is updated for any new, valid message received from the transponder.
-	LastContact int64 `json:"last_contact"`
+	LastContact int64 `json:"lastContact"`
 
 	// WGS-84 longitude in decimal degrees. Can be nil.
 	Longitude *float64 `json:"longitude"`
@@ -74,28 +74,28 @@ type StateVector struct {
 	Latitude *float64 `json:"latitude"`
 
 	// Barometric altitude in meters. Can be nil.
-	BaroAltitude *float64 `json:"baro_altitude"`
+	BaroAltitude *float64 `json:"baroAltitude"`
 
 	// Boolean value which indicates if the position was retrieved from a surface position report.
-	OnGround bool `json:"on_ground"`
+	OnGround bool `json:"onGround"`
 
 	// Velocity over ground in m/s. Can be nil.
 	Velocity *float64 `json:"velocity"`
 
 	// True track in decimal degrees clockwise from north (north=0°). Can be nil.
-	TrueTrack *float64 `json:"true_track"`
+	TrueTrack *float64 `json:"trueTrack"`
 
 	// Vertical rate in m/s.
 	// A positive value indicates that the airplane is climbing, a negative value indicates that it descends.
 	// Can be nil.
-	VerticalRate *float64 `json:"vertical_rate"`
+	VerticalRate *float64 `json:"verticalTate"`
 
 	// IDs of the receivers which contributed to this state vector.
 	//  Is nil if no filtering for sensor was used in the request.
 	Sensors []int `json:"sensors"`
 
 	// Geometric altitude in meters. Can be nil.
-	GeoAltitude *float64 `json:"geo_altitude"`
+	GeoAltitude *float64 `json:"geoAltitude"`
 
 	// The transponder code aka Squawk. Can be nil.
 	Squawk *string `json:"squawk"`
@@ -108,7 +108,7 @@ type StateVector struct {
 	// 1 = ASTERIX
 	// 2 = MLAT
 	// 3 = FLARM
-	PositionSource int `json:"position_source"`
+	PositionSource int `json:"positionSource"`
 
 	// Aircraft category.
 	// 0 = No information at all
