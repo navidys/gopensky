@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"net/url"
 	"time"
-
-	"github.com/rs/zerolog/log"
 )
 
 func GetTrackByAircraft(ctx context.Context, icao24 string, time int64) (FlightTrack, error) {
@@ -52,12 +50,46 @@ func GetTrackByAircraft(ctx context.Context, icao24 string, time int64) (FlightT
 func parseFlightTrackResponse(response *FlightTrackResponse) (FlightTrack, error) {
 	var flightTrack FlightTrack
 
-	log.Info().Msgf("%v", response)
-
 	flightTrack.Icao24 = response.Icao24
 	flightTrack.Callsign = response.Callsign
-	flightTrack.StartTime = time.Unix(int64(response.StartTime), 1000).Unix()
-	flightTrack.EndTime = time.Unix(int64(response.EndTime), 1000).Unix()
+	flightTrack.EndTime = time.Unix(int64(response.EndTime), 0).Unix()
+	// the api is not returning proper start time value
+	// temporary checking if its <= 0 then allocated 1
+	if flightTrack.StartTime <= 0 {
+		flightTrack.StartTime = 1
+	}
+
+	fmt.Println(len(response.Path))
+
+	if len(response.Path) < trackOnGroundIndex+1 {
+		return flightTrack, errWaypointsDataCount
+	}
+
+	for _, data := range response.Path {
+		var waypoint WayPoint
+
+		// TrueTrack index
+		if data[trackTureTrackIndex] != nil {
+			trueTrack, assertionOK := data[trackTureTrackIndex].(float64)
+			if !assertionOK {
+				return flightTrack, fmt.Errorf("%w: %v", errWaypointTrueTrack, data[trackTureTrackIndex])
+			}
+
+			waypoint.TrueTrack = &trueTrack
+		}
+
+		// Onground index
+		if data[trackOnGroundIndex] != nil {
+			onGround, assertionOK := data[trackOnGroundIndex].(bool)
+			if !assertionOK {
+				return flightTrack, fmt.Errorf("%w: %v", errWaypointOnGround, data[trackOnGroundIndex])
+			}
+
+			waypoint.OnGround = onGround
+		}
+
+		flightTrack.Path = append(flightTrack.Path, waypoint)
+	}
 
 	return flightTrack, nil
 }

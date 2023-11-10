@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/navidys/gopensky"
 	"github.com/spf13/cobra"
 )
 
@@ -11,14 +10,6 @@ var statesCommand = &cobra.Command{
 	Short:   "retrieve state vector information",
 	Run:     runStatesCommand,
 	PreRunE: preStateRun,
-}
-
-func preStateRun(cmd *cobra.Command, args []string) error {
-	if cmdTime < 0 {
-		return gopensky.ErrInvalidUnixTime
-	}
-
-	return nil
 }
 
 func registerStatesCommand() {

@@ -27,6 +27,14 @@ var (
 	errStateVecPositionSource = errors.New("state vector position source assertion failed")
 	errStateVecCategory       = errors.New("state vector category assertion failed")
 
+	errWaypointsDataCount   = errors.New("invalid track waypoints data count")
+	errWaypointTime         = errors.New("track waypoints time assertion failed")
+	errWaypointLatitude     = errors.New("track waypoints latitude assertion failed")
+	errWaypointLongitude    = errors.New("track waypoints longitude assertion failed")
+	errWaypointBaroAltitude = errors.New("track waypoints baro altitude assertion failed")
+	errWaypointTrueTrack    = errors.New("track waypoints true track assertion failed")
+	errWaypointOnGround     = errors.New("track waypoints on ground assertion failed")
+
 	ErrInvalidAirportName  = errors.New("invalid airport name")
 	ErrInvalidAircraftName = errors.New("invalid aircraft name")
 	ErrInvalidUnixTime     = errors.New("invalid unix time")

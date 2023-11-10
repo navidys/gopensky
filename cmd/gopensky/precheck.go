@@ -12,6 +12,14 @@ import (
 	"golang.org/x/term"
 )
 
+func preStateRun(cmd *cobra.Command, args []string) error {
+	if cmdTime < 0 {
+		return gopensky.ErrInvalidUnixTime
+	}
+
+	return nil
+}
+
 func preRunFlightArrivalsDepartures(cmd *cobra.Command, args []string) error {
 	if strings.TrimSpace(cmdAirport) == "" {
 		return gopensky.ErrInvalidAirportName
@@ -66,7 +74,7 @@ func preRun(cmd *cobra.Command, args []string) error {
 	}
 
 	if cmdUsername != "" {
-		fmt.Print("Enter Password: ") //nolint:forbidigo
+		fmt.Print("Enter password: ") //nolint:forbidigo
 
 		bytePassword, err := term.ReadPassword(0)
 		if err != nil {

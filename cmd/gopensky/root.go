@@ -13,7 +13,7 @@ var (
 	cmdUsername          string
 	cmdPassword          string
 	cmdIcao24List        []string
-	cmdTime              int64 = -1
+	cmdTime              int64 = 0
 	cmdDebug                   = false
 	cmdPrintJSON               = false
 	cmdStatesExtended          = false

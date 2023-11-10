@@ -21,6 +21,15 @@ const (
 	stateVecCategoryIndex
 )
 
+const (
+	trackTimeIndex = 0 + iota
+	trackLatitudeIndex
+	trackLongitudeIndex
+	trackBaroAltitudeIndex
+	trackTureTrackIndex
+	trackOnGroundIndex
+)
+
 type StatesResponse struct {
 	// The time which the state vectors in this response are associated with.
 	// All vectors represent the state of a vehicle with the interval.
@@ -176,11 +185,11 @@ type FlighData struct {
 }
 
 type FlightTrackResponse struct {
-	Icao24    string        `json:"icao24"`
-	StartTime float64       `json:"startTime"`
-	EndTime   float64       `json:"endTime"`
-	Callsign  *string       `json:"callsign"`
-	Path      []interface{} `json:"path"`
+	Icao24    string          `json:"icao24"`
+	StartTime float64         `json:"startTime"`
+	EndTime   float64         `json:"endTime"`
+	Callsign  *string         `json:"callsign"`
+	Path      [][]interface{} `json:"path"`
 }
 
 type FlightTrack struct {
