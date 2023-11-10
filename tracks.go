@@ -59,47 +59,86 @@ func parseFlightTrackResponse(response *FlightTrackResponse) (FlightTrack, error
 		flightTrack.StartTime = 1
 	}
 
-	for _, data := range response.Path {
-		if len(data) < trackOnGroundIndex {
-			return flightTrack, errWaypointsDataCount
+	for _, waypointData := range response.Path {
+		waypoint, err := decodeWaypoint(waypointData)
+		if err != nil {
+			return flightTrack, fmt.Errorf("decode waypoint: %w", err)
 		}
 
-		var waypoint WayPoint
-
-		// BaroAltitude index
-		if data[trackBaroAltitudeIndex] != nil {
-			baroAltitude, assertionOK := data[trackBaroAltitudeIndex].(float64)
-			if !assertionOK {
-				return flightTrack, fmt.Errorf("%w: %v", errWaypointBaroAltitude, data[trackBaroAltitudeIndex])
-			}
-
-			waypoint.BaroAltitude = &baroAltitude
-		}
-
-		// TrueTrack index
-		if data[trackTureTrackIndex] != nil {
-			trueTrack, assertionOK := data[trackTureTrackIndex].(float64)
-			if !assertionOK {
-				return flightTrack, fmt.Errorf("%w: %v", errWaypointTrueTrack, data[trackTureTrackIndex])
-			}
-
-			waypoint.TrueTrack = &trueTrack
-		}
-
-		// Onground index
-		if data[trackOnGroundIndex] != nil {
-			onGround, assertionOK := data[trackOnGroundIndex].(bool)
-			if !assertionOK {
-				return flightTrack, fmt.Errorf("%w: %v", errWaypointOnGround, data[trackOnGroundIndex])
-			}
-
-			waypoint.OnGround = onGround
-		}
-
-		flightTrack.Path = append(flightTrack.Path, waypoint)
+		flightTrack.Path = append(flightTrack.Path, *waypoint)
 	}
 
 	return flightTrack, nil
+}
+
+func decodeWaypoint(data []interface{}) (*WayPoint, error) { //nolint:funlen,cyclop
+	if len(data) < trackOnGroundIndex {
+		return nil, errWaypointsDataCount
+	}
+
+	var waypoint WayPoint
+
+	// Time index
+	if data[trackTimeIndex] != nil {
+		wtime, assertionOK := data[trackTimeIndex].(int64)
+		if !assertionOK {
+			return nil, fmt.Errorf("%w: %v", errWaypointTime, data[trackTimeIndex])
+		}
+
+		waypoint.Time = wtime
+	}
+
+	// Latitude index
+	if data[trackLatitudeIndex] != nil {
+		latitude, assertionOK := data[trackLatitudeIndex].(float64)
+		if !assertionOK {
+			return nil, fmt.Errorf("%w: %v", errWaypointLatitude, data[trackLatitudeIndex])
+		}
+
+		waypoint.Latitude = &latitude
+	}
+
+	// Longitude index
+	if data[trackLongitudeIndex] != nil {
+		longitude, assertionOK := data[trackLongitudeIndex].(float64)
+		if !assertionOK {
+			return nil, fmt.Errorf("%w: %v", errWaypointLongitude, data[trackLongitudeIndex])
+		}
+
+		waypoint.Longitude = &longitude
+	}
+
+	// BaroAltitude index
+	if data[trackBaroAltitudeIndex] != nil {
+		baroAltitude, assertionOK := data[trackBaroAltitudeIndex].(float64)
+		if !assertionOK {
+			return nil, fmt.Errorf("%w: %v", errWaypointBaroAltitude, data[trackBaroAltitudeIndex])
+		}
+
+		waypoint.BaroAltitude = &baroAltitude
+	}
+
+	// TrueTrack index
+	if data[trackTureTrackIndex] != nil {
+		trueTrack, assertionOK := data[trackTureTrackIndex].(float64)
+		if !assertionOK {
+			return nil, fmt.Errorf("%w: %v", errWaypointTrueTrack, data[trackTureTrackIndex])
+		}
+
+		waypoint.TrueTrack = &trueTrack
+	}
+
+	// Onground index
+	if data[trackOnGroundIndex] != nil {
+		onGround, assertionOK := data[trackOnGroundIndex].(bool)
+		if !assertionOK {
+			return nil, fmt.Errorf("%w: %v", errWaypointOnGround, data[trackOnGroundIndex])
+		}
+
+		waypoint.OnGround = onGround
+	}
+
+	return &waypoint, nil
 }
 
 func getTracksRequestParams(time int64, icao24 string) url.Values {

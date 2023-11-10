@@ -75,6 +75,8 @@ func preRun(cmd *cobra.Command, args []string) error {
 			return errPasswordEntry
 		}
 
+		fmt.Println() //nolint:forbidigo
+
 		cmdPassword = strings.TrimSpace(string(bytePassword))
 	}
 
