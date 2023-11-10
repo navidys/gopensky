@@ -7,6 +7,7 @@ import (
 	"time"
 )
 
+// GetTrackByAircraft retrieves the trajectory for a certain aircraft at a given time.
 func GetTrackByAircraft(ctx context.Context, icao24 string, time int64) (FlightTrack, error) {
 	var (
 		flightTrack         FlightTrack

@@ -35,6 +35,7 @@ import "github.com/navidys/gopensky"
 * `GetDeparturesByAirport` - retrieves flights for a certain airport which departed within a given time interval.
 * `GetFlightsByInterval` - retrieves flights for a certain time interval.
 * `GetFlightsByAircraft` - retrieves flights for a particular aircraft within a certain time interval.
+* `GetTrackByAircraft` - retrieves the trajectory for a certain aircraft at a given time.
 
 ## Examples
 
