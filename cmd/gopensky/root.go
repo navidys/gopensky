@@ -13,10 +13,9 @@ var (
 	cmdUsername          string
 	cmdPassword          string
 	cmdIcao24List        []string
-	cmdTime              int64 = 0
-	cmdDebug                   = false
-	cmdPrintJSON               = false
-	cmdStatesExtended          = false
+	cmdTime              int64
+	cmdPrintJSON         = false
+	cmdStatesExtended    = false
 	cmdStatesBoundingBox []float64
 	cmdAirport           string
 	cmdAircraft          string
@@ -50,7 +49,6 @@ func execute() {
 func init() { //nolint:gochecknoinits
 	rootCmd.CompletionOptions.DisableDefaultCmd = true
 	rootCmd.PersistentFlags().StringVarP(&cmdUsername, "username", "u", cmdUsername, "connection username")
-	rootCmd.PersistentFlags().BoolVarP(&cmdDebug, "debug", "d", cmdDebug, "run in debug mode")
 	rootCmd.PersistentFlags().BoolVarP(&cmdPrintJSON, "json", "j", cmdPrintJSON, "print json output")
 	rootCmd.PersistentFlags().BoolVarP(&cmdPrintVersion, "version", "v", cmdPrintVersion, "print version and exit")
 

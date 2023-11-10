@@ -59,14 +59,22 @@ func parseFlightTrackResponse(response *FlightTrackResponse) (FlightTrack, error
 		flightTrack.StartTime = 1
 	}
 
-	fmt.Println(len(response.Path))
-
-	if len(response.Path) < trackOnGroundIndex+1 {
-		return flightTrack, errWaypointsDataCount
-	}
-
 	for _, data := range response.Path {
+		if len(data) < trackOnGroundIndex {
+			return flightTrack, errWaypointsDataCount
+		}
+
 		var waypoint WayPoint
+
+		// BaroAltitude index
+		if data[trackBaroAltitudeIndex] != nil {
+			baroAltitude, assertionOK := data[trackBaroAltitudeIndex].(float64)
+			if !assertionOK {
+				return flightTrack, fmt.Errorf("%w: %v", errWaypointBaroAltitude, data[trackBaroAltitudeIndex])
+			}
+
+			waypoint.BaroAltitude = &baroAltitude
+		}
 
 		// TrueTrack index
 		if data[trackTureTrackIndex] != nil {

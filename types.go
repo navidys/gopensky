@@ -220,13 +220,13 @@ type WayPoint struct {
 	Longitude *float64 `json:"longitude"`
 
 	// Barometric altitude in meters. Can be nil.
-	BaroAltitude *float64 `json:"baro_altitude"`
+	BaroAltitude *float64 `json:"baroAltitude"`
 
 	// True track in decimal degrees clockwise from north (north=0°). Can be nil.
-	TrueTrack *float64 `json:"true_track"`
+	TrueTrack *float64 `json:"trueTrack"`
 
 	// Boolean value which indicates if the position was retrieved from a surface position report.
-	OnGround bool `json:"on_ground"`
+	OnGround bool `json:"onGround"`
 }
 
 type BoundingBoxOptions struct {

@@ -67,12 +67,6 @@ func preRunTracks(cmd *cobra.Command, args []string) error {
 func preRun(cmd *cobra.Command, args []string) error {
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 
-	zerolog.SetGlobalLevel(zerolog.InfoLevel)
-
-	if cmdDebug {
-		zerolog.SetGlobalLevel(zerolog.DebugLevel)
-	}
-
 	if cmdUsername != "" {
 		fmt.Print("Enter password: ") //nolint:forbidigo
 
