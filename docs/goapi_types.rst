@@ -168,6 +168,59 @@ type :ref:`FlighData <TYPE_FLIGHT_DATA>`
     }
 
 
+.. _TYPE_FLIGHT_TRACK:
+
+type :ref:`FlightTrack <TYPE_FLIGHT_TRACK>`
+-------------------------------------------------
+
+.. code-block:: go
+
+    type FlightTrack struct {
+      // Unique ICAO 24-bit address of the transponder in hex string representation.
+      Icao24 string `json:"icao24"`
+
+      // Time of the first waypoint in seconds since epoch (Unix time).
+      StartTime int64 `json:"startTime"`
+
+      // Time of the last waypoint in seconds since epoch (Unix time).
+      EndTime int64 `json:"endTime"`
+
+      // Callsign (8 characters) that holds for the whole track. Can be nil.
+      Callsign *string `json:"callsign"`
+
+      // Waypoints of the trajectory (description below).
+      Path []WayPoints `json:"path"`
+    }
+
+
+.. _TYPE_WAYPOINT:
+
+type :ref:`WayPoint <TYPE_WAYPOINT>`
+-------------------------------------------------
+
+.. code-block:: go
+
+    type WayPoint struct {
+      // Time which the given waypoint is associated with in seconds since epoch (Unix time).
+      Time int64 `json:"time"`
+
+      // WGS-84 latitude in decimal degrees. Can be nil.
+      Latitude *float64 `json:"latitude"`
+
+      // WGS-84 longitude in decimal degrees. Can be nil.
+      Longitude *float64 `json:"longitude"`
+
+      // Barometric altitude in meters. Can be nil.
+      BaroAltitude *float64 `json:"baro_altitude"`
+
+      // True track in decimal degrees clockwise from north (north=0°). Can be nil.
+      TrueTrack *float64 `json:"true_track"`
+
+      // Boolean value which indicates if the position was retrieved from a surface position report.
+      OnGround bool `json:"on_ground"`
+    }
+
+
 .. _TYPE_BBOX_OPTIONS:
 
 type :ref:`BoundingBoxOption <TYPE_BBOX_OPTIONS>`

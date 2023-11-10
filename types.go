@@ -175,7 +175,7 @@ type FlighData struct {
 	ArrivalAirportCandidatesCount int `json:"arrivalAirportCandidatesCount"`
 }
 
-type Track struct {
+type FlightTrack struct {
 	// Unique ICAO 24-bit address of the transponder in hex string representation.
 	Icao24 string `json:"icao24"`
 
@@ -189,10 +189,10 @@ type Track struct {
 	Callsign *string `json:"callsign"`
 
 	// Waypoints of the trajectory (description below).
-	Path []WayPoints `json:"path"`
+	Path []WayPoint `json:"path"`
 }
 
-type WayPoints struct {
+type WayPoint struct {
 	// Time which the given waypoint is associated with in seconds since epoch (Unix time).
 	Time int64 `json:"time"`
 
