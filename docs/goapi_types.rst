@@ -189,7 +189,7 @@ type :ref:`FlightTrack <TYPE_FLIGHT_TRACK>`
       Callsign *string `json:"callsign"`
 
       // Waypoints of the trajectory (description below).
-      Path []WayPoints `json:"path"`
+      Path []WayPoint `json:"path"`
     }
 
 
