@@ -11,6 +11,73 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+func printTrackTable(track gopensky.FlightTrack) { //nolint:funlen,cyclop
+	writer := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', 0)
+	callSign := "<nil>"
+
+	if track.Callsign != nil {
+		callSign = *track.Callsign
+	}
+
+	trackInfo := []string{
+		"Icao24   : " + track.Icao24,
+		fmt.Sprintf("StartTime: %s", time.Unix(track.StartTime, 0).UTC()),
+		fmt.Sprintf("EndTime:   %s", time.Unix(track.EndTime, 0).UTC()),
+		"Callsign:  " + callSign,
+		"", // just to print a new line
+	}
+
+	if _, err := fmt.Fprintln(os.Stdout, strings.Join(trackInfo, "\n")); err != nil {
+		log.Error().Msgf("%v", err)
+	}
+
+	header := fmt.Sprintf("%s\t%s\t%s\t%s\t%s\t%s",
+		"Time", "Latitude", "Longitude", "BaroAltitude", "TrueTrack", "OnGround",
+	)
+
+	for _, waypoint := range track.Path {
+		var (
+			latitude     = "<nil>"
+			longitude    = "<nil>"
+			baroAltitude = "<nil>"
+			trueTrack    = "<nil>"
+		)
+
+		if waypoint.Latitude != nil {
+			latitude = fmt.Sprintf("%f", *waypoint.Latitude)
+		}
+
+		if waypoint.Longitude != nil {
+			longitude = fmt.Sprintf("%f", *waypoint.Longitude)
+		}
+
+		if waypoint.BaroAltitude != nil {
+			baroAltitude = fmt.Sprintf("%f", *waypoint.BaroAltitude)
+		}
+
+		if waypoint.TrueTrack != nil {
+			trueTrack = fmt.Sprintf("%f", *waypoint.TrueTrack)
+		}
+
+		data := fmt.Sprintf("%s\t%s\t%s\t%s\t%s\t%v",
+			time.Unix(waypoint.Time, 0).UTC(),
+			latitude, longitude, baroAltitude, trueTrack, waypoint.OnGround,
+		)
+
+		if _, err := fmt.Fprintln(writer, data); err != nil {
+			log.Error().Msgf("%v", err)
+		}
+	}
+
+	if _, err := fmt.Fprintln(writer, header); err != nil {
+		log.Error().Msgf("%v", err)
+	}
+
+	if err := writer.Flush(); err != nil {
+		log.Error().Msgf("failed to flush template: %v", err)
+	}
+}
+
 func printFlightsTable(flights []gopensky.FlighData) { //nolint:funlen
 	writer := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', 0)
 

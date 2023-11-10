@@ -59,7 +59,7 @@ func GetStates(ctx context.Context, time int64, icao24 []string,
 
 func getStateRequestParams(time int64, icao24 []string, bBox *BoundingBoxOptions, extended bool) url.Values {
 	requestParams := make(url.Values)
-	if time >= 0 {
+	if time > 0 {
 		requestParams.Add("time", fmt.Sprintf("%d", time))
 	}
 

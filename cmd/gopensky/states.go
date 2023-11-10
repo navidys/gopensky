@@ -12,14 +12,6 @@ var statesCommand = &cobra.Command{
 	PreRunE: preStateRun,
 }
 
-func preStateRun(cmd *cobra.Command, args []string) error {
-	if cmdTime < -1 {
-		return errInvalidTimeInput
-	}
-
-	return nil
-}
-
 func registerStatesCommand() {
 	// states command
 	statesCommand.Flags().StringSliceVarP(&cmdIcao24List, "icao24", "i", cmdIcao24List,

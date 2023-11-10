@@ -21,6 +21,15 @@ const (
 	stateVecCategoryIndex
 )
 
+const (
+	trackTimeIndex = 0 + iota
+	trackLatitudeIndex
+	trackLongitudeIndex
+	trackBaroAltitudeIndex
+	trackTureTrackIndex
+	trackOnGroundIndex
+)
+
 type StatesResponse struct {
 	// The time which the state vectors in this response are associated with.
 	// All vectors represent the state of a vehicle with the interval.
@@ -173,6 +182,51 @@ type FlighData struct {
 
 	// Number of other possible departure airports.
 	ArrivalAirportCandidatesCount int `json:"arrivalAirportCandidatesCount"`
+}
+
+type FlightTrackResponse struct {
+	Icao24    string          `json:"icao24"`
+	StartTime float64         `json:"startTime"`
+	EndTime   float64         `json:"endTime"`
+	Callsign  *string         `json:"callsign"`
+	Path      [][]interface{} `json:"path"`
+}
+
+type FlightTrack struct {
+	// Unique ICAO 24-bit address of the transponder in hex string representation.
+	Icao24 string `json:"icao24"`
+
+	// Time of the first waypoint in seconds since epoch (Unix time).
+	StartTime int64 `json:"startTime"`
+
+	// Time of the last waypoint in seconds since epoch (Unix time).
+	EndTime int64 `json:"endTime"`
+
+	// Callsign (8 characters) that holds for the whole track. Can be nil.
+	Callsign *string `json:"callsign"`
+
+	// Waypoints of the trajectory (description below).
+	Path []WayPoint `json:"path"`
+}
+
+type WayPoint struct {
+	// Time which the given waypoint is associated with in seconds since epoch (Unix time).
+	Time int64 `json:"time"`
+
+	// WGS-84 latitude in decimal degrees. Can be nil.
+	Latitude *float64 `json:"latitude"`
+
+	// WGS-84 longitude in decimal degrees. Can be nil.
+	Longitude *float64 `json:"longitude"`
+
+	// Barometric altitude in meters. Can be nil.
+	BaroAltitude *float64 `json:"baroAltitude"`
+
+	// True track in decimal degrees clockwise from north (north=0°). Can be nil.
+	TrueTrack *float64 `json:"trueTrack"`
+
+	// Boolean value which indicates if the position was retrieved from a surface position report.
+	OnGround bool `json:"onGround"`
 }
 
 type BoundingBoxOptions struct {

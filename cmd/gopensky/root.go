@@ -13,10 +13,9 @@ var (
 	cmdUsername          string
 	cmdPassword          string
 	cmdIcao24List        []string
-	cmdTime              int64 = -1
-	cmdDebug                   = false
-	cmdPrintJSON               = false
-	cmdStatesExtended          = false
+	cmdTime              int64
+	cmdPrintJSON         = false
+	cmdStatesExtended    = false
 	cmdStatesBoundingBox []float64
 	cmdAirport           string
 	cmdAircraft          string
@@ -35,8 +34,7 @@ var (
 		PersistentPreRunE: preRun,
 	}
 
-	errInvalidTimeInput = errors.New("invalid time entry")
-	errPasswordEntry    = errors.New("password entry error")
+	errPasswordEntry = errors.New("password entry error")
 )
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -51,7 +49,6 @@ func execute() {
 func init() { //nolint:gochecknoinits
 	rootCmd.CompletionOptions.DisableDefaultCmd = true
 	rootCmd.PersistentFlags().StringVarP(&cmdUsername, "username", "u", cmdUsername, "connection username")
-	rootCmd.PersistentFlags().BoolVarP(&cmdDebug, "debug", "d", cmdDebug, "run in debug mode")
 	rootCmd.PersistentFlags().BoolVarP(&cmdPrintJSON, "json", "j", cmdPrintJSON, "print json output")
 	rootCmd.PersistentFlags().BoolVarP(&cmdPrintVersion, "version", "v", cmdPrintVersion, "print version and exit")
 
@@ -60,10 +57,12 @@ func init() { //nolint:gochecknoinits
 	registerDeparturesCommand()
 	registerFlightsCommand()
 	registerAircraftCommand()
+	registerTracksCommand()
 
 	rootCmd.AddCommand(statesCommand)
 	rootCmd.AddCommand(arrivalsCommand)
 	rootCmd.AddCommand(departuresCommand)
 	rootCmd.AddCommand(flightsCommand)
 	rootCmd.AddCommand(aircraftCommand)
+	rootCmd.AddCommand(tracksCommand)
 }

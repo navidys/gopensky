@@ -135,6 +135,27 @@ func :ref:`GetFlightsByAircraft <FUNC_GET_FLIGHTS_BY_AIRCRAFT>`
 
     :Returns: :ref:`[]FlightData<TYPE_FLIGHT_DATA>`, error
 
+.. _FUNC_GET_TRACKS_BY_AIRCRAFT:
+
+func :ref:`GetTrackByAircraft <FUNC_GET_TRACKS_BY_AIRCRAFT>`
+--------------------------------------------------------------------
+
+    Retrieves the trajectory for a certain aircraft at a given time.
+
+    It is not possible to access flight tracks from more than 30 days in the past.
+
+    .. code-block:: go
+
+        func GetTrackByAircraft(ctx context.Context, icao24 string, time int64) (FlightTrack, error)
+
+
+    :Parameters:
+        - **ctx** (`context.Context <https://pkg.go.dev/context#Context>`_) - connection context.
+        - **icao24** (string) - Unique ICAO 24-bit address of the transponder in hex string representation.
+        - **time** (int64) - Unix time in seconds since epoch. It can be any time between start and end of a known flight. If time = 0, get the live track if there is any flight ongoing for the given aircraft.
+
+    :Returns: :ref:`FlightTrack<TYPE_FLIGHT_TRACK>`, error
+
 
 .. _BBOX_FUNC:
 

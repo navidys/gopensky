@@ -20,8 +20,8 @@ func registerDeparturesCommand() {
 		"ICAO identifier for the airport")
 
 	departuresCommand.Flags().Int64VarP(&cmdBeginTime, "being", "b", cmdBeginTime,
-		"start of time interval to retrieve flights for as Unix time (seconds since epoch)")
+		"start of time interval to retrieve flights for as unix time (seconds since epoch)")
 
 	departuresCommand.Flags().Int64VarP(&cmdEndTime, "end", "e", cmdEndTime,
-		"end of time interval to retrieve flights for as Unix time (seconds since epoch)")
+		"end of time interval to retrieve flights for as unix time (seconds since epoch)")
 }

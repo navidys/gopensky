@@ -30,11 +30,12 @@ import "github.com/navidys/gopensky"
 
 ## Features
 
-* `GetStates` - retrieve state vectors for a given time.
-* `GetArrivalsByAirport` - retrieves flights for a certain airport which arrived within a given time interval.
-* `GetDeparturesByAirport` - retrieves flights for a certain airport which departed within a given time interval.
-* `GetFlightsByInterval` - retrieves flights for a certain time interval.
-* `GetFlightsByAircraft` - retrieves flights for a particular aircraft within a certain time interval.
+* [GetStates](https://navidys.github.io/gopensky/goapi_functions.html#func-getstates) - retrieve state vectors for a given time.
+* [GetArrivalsByAirport](https://navidys.github.io/gopensky/goapi_functions.html#func-get-arrivals-by-airport) - retrieves flights for a certain airport which arrived within a given time interval.
+* [GetDeparturesByAirport](https://navidys.github.io/gopensky/goapi_functions.html#func-get-departures-by-airport) - retrieves flights for a certain airport which departed within a given time interval.
+* [GetFlightsByInterval](https://navidys.github.io/gopensky/goapi_functions.html#func-getflightsbyinterval) - retrieves flights for a certain time interval.
+* [GetFlightsByAircraft](https://navidys.github.io/gopensky/goapi_functions.html#func-getflightsbyaircraft) - retrieves flights for a particular aircraft within a certain time interval.
+* [GetTrackByAircraft](https://navidys.github.io/gopensky/goapi_functions.html#func-gettrackbyaircraft) - retrieves the trajectory for a certain aircraft at a given time.
 
 ## Examples
 
