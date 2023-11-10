@@ -25,10 +25,10 @@ Usage:
   gopensky [command]
 
 Available Commands:
-  aircraft    Retrieve flights for a particular aircraft within a certain time interval
-  arrivals    Retrieve flights for a certain airport which arrived within a given time interval
-  departures  Retrieve flights for a certain airport which departed within a given time interval
-  flights     Retrieve flights for a certain time interval
+  aircraft    Retrieve flights for a particular aircraft within a certain time interval (<= 30 days).
+  arrivals    Retrieve flights for a certain airport which arrived within a given time interval (<= 7 days)
+  departures  Retrieve flights for a certain airport which departed within a given time interval (<= 7 days)
+  flights     Retrieve flights for a certain time interval (<= 2 hours)
   help        Help about any command
   states      retrieve state vector information
 

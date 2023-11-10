@@ -6,8 +6,10 @@ import (
 
 //nolint:gochecknoglobals
 var departuresCommand = &cobra.Command{
-	Use:     "departures",
-	Short:   "Retrieve flights for a certain airport which departed within a given time interval",
+	Use:   "departures",
+	Short: "Retrieve flights for a certain airport which departed within a given time interval (<= 7 days)",
+	Long: `Retrieve flights for a certain airport which departed within a given time interval.
+The given time interval must not be larger than seven days!`,
 	Run:     runFlightsCommand,
 	PreRunE: preRunFlightArrivalsDepartures,
 }
