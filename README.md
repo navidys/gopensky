@@ -30,13 +30,11 @@ import "github.com/navidys/gopensky"
 
 ## Features
 
-| Function  | Description |
-| --------- | ----------- |
-| GetStates |  Retrieve state vectors for a given time.
-| GetArrivalsByAirport | Retrieves flights for a certain airport which arrived within a given time interval.
-| GetDeparturesByAirport | Retrieves flights for a certain airport which departed within a given time interval.
-| GetFlightsByInterval | Retrieves flights for a certain time interval.
-| GetFlightsByAircraft | Retrieves flights for a particular aircraft within a certain time interval
+* `GetStates` - retrieve state vectors for a given time.
+* `GetArrivalsByAirport` - retrieves flights for a certain airport which arrived within a given time interval.
+* `GetDeparturesByAirport` - retrieves flights for a certain airport which departed within a given time interval.
+* `GetFlightsByInterval` - retrieves flights for a certain time interval.
+* `GetFlightsByAircraft` - retrieves flights for a particular aircraft within a certain time interval.
 
 ## Examples
 
