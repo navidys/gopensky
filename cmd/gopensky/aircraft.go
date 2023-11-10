@@ -6,8 +6,10 @@ import (
 
 //nolint:gochecknoglobals
 var aircraftCommand = &cobra.Command{
-	Use:     "aircraft",
-	Short:   "Retrieve flights for a particular aircraft within a certain time interval",
+	Use:   "aircraft",
+	Short: "Retrieve flights for a particular aircraft within a certain time interval (<= 30 days).",
+	Long: `Retrieve flights for a particular aircraft within a certain time interval.
+The given time interval must not be larger than 30 days!`,
 	Run:     runFlightsCommand,
 	PreRunE: preRunAircraft,
 }
