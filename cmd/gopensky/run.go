@@ -122,7 +122,6 @@ func runTracksCommand(cmd *cobra.Command, args []string) {
 
 		fmt.Printf("%s\n", jsonResult) //nolint:forbidigo
 	} else {
-		fmt.Println("table")
-		// printStatesTable(states)
+		printTrackTable(flightTrack)
 	}
 }
