@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/navidys/gopensky"
 	"github.com/spf13/cobra"
 )
 
@@ -13,8 +14,8 @@ var statesCommand = &cobra.Command{
 }
 
 func preStateRun(cmd *cobra.Command, args []string) error {
-	if cmdTime < -1 {
-		return errInvalidTimeInput
+	if cmdTime < 0 {
+		return gopensky.ErrInvalidUnixTime
 	}
 
 	return nil

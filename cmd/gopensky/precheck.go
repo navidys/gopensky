@@ -44,6 +44,18 @@ func preRunFlights(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
+func preRunTracks(cmd *cobra.Command, args []string) error {
+	if cmdTime < 0 {
+		return gopensky.ErrInvalidUnixTime
+	}
+
+	if strings.TrimSpace(cmdAircraft) == "" {
+		return gopensky.ErrInvalidAircraftName
+	}
+
+	return nil
+}
+
 func preRun(cmd *cobra.Command, args []string) error {
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 

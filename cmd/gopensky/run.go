@@ -96,3 +96,6 @@ func runFlightsCommand(cmd *cobra.Command, args []string) {
 		printFlightsTable(flightsData)
 	}
 }
+
+func runTracksCommand(cmd *cobra.Command, args []string) {
+}

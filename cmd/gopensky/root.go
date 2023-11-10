@@ -35,8 +35,7 @@ var (
 		PersistentPreRunE: preRun,
 	}
 
-	errInvalidTimeInput = errors.New("invalid time entry")
-	errPasswordEntry    = errors.New("password entry error")
+	errPasswordEntry = errors.New("password entry error")
 )
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -60,10 +59,12 @@ func init() { //nolint:gochecknoinits
 	registerDeparturesCommand()
 	registerFlightsCommand()
 	registerAircraftCommand()
+	registerTracksCommand()
 
 	rootCmd.AddCommand(statesCommand)
 	rootCmd.AddCommand(arrivalsCommand)
 	rootCmd.AddCommand(departuresCommand)
 	rootCmd.AddCommand(flightsCommand)
 	rootCmd.AddCommand(aircraftCommand)
+	rootCmd.AddCommand(tracksCommand)
 }
