@@ -20,8 +20,8 @@ func registerAircraftCommand() {
 		"unique ICAO 24-bit address of the transponder in hex string representation.")
 
 	aircraftCommand.Flags().Int64VarP(&cmdBeginTime, "being", "b", cmdBeginTime,
-		"start of time interval to retrieve flights for as Unix time (seconds since epoch)")
+		"start of time interval to retrieve flights for as unix time (seconds since epoch)")
 
 	aircraftCommand.Flags().Int64VarP(&cmdEndTime, "end", "e", cmdEndTime,
-		"end of time interval to retrieve flights for as Unix time (seconds since epoch)")
+		"end of time interval to retrieve flights for as unix time (seconds since epoch)")
 }
