@@ -12,21 +12,7 @@ REVISION = $(shell cat VERSION  | grep REVISION | cut -d'=' -f2)
 # Build binary, documents
 #=================================================
 
-all: binary
-
-.PHONY: clean
-clean:
-	@rm -rf $(BIN)
-
-.PHONY: binary
-binary: $(TARGET)  ## Build gopensky binary
-	@true
-
-.PHONY: $(TARGET)
-$(TARGET): $(SRC)
-	@echo "running go build"
-	@mkdir -p $(BIN)
-	$(GO) build $(BUILDFLAGS) -ldflags="-X 'main.buildVersion=$(VERSION)' -X 'main.buildRevision=$(REVISION)'" -o $(BIN)/$(TARGET) ./cmd/$(TARGET)/
+all: validate
 
 .PHONY: docs
 docs: ## Generates html documents
@@ -63,7 +49,7 @@ install.tools: .install.pre-commit .install.codespell .install.golangci-lint .in
 #=================================================
 
 .PHONY: validate
-validate: gofmt lint pre-commit codespell vendor ## Validate prometheus-podman-exporter code (fmt, lint, ...)
+validate: gofmt lint pre-commit codespell vendor ## Validate code (fmt, lint, ...)
 
 .PHONY: vendor
 vendor: ## Check vendor
