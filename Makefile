@@ -1,12 +1,8 @@
 BIN := ./bin
 GO := go
-TARGET := gopensky
 SRC = $(shell find . -type f -name '*.go' -not -path "./vendor/*")
 PRE_COMMIT = $(shell command -v bin/venv/bin/pre-commit ~/.local/bin/pre-commit pre-commit | head -n1)
 PKG_MANAGER ?= $(shell command -v dnf yum|head -n1)
-BUILDFLAGS := -mod=vendor $(BUILDFLAGS)
-VERSION = $(shell cat VERSION  | grep VERSION | cut -d'=' -f2)
-REVISION = $(shell cat VERSION  | grep REVISION | cut -d'=' -f2)
 
 #=================================================
 # Build binary, documents
