@@ -8,8 +8,6 @@ The API lets you retrieve live airspace information (ADS-B and Mode S data) for 
 
 For documentation and examples visit [Golang OpenSky Network API](https://navidys.github.io/gopensky/).
 
-A command line ([opensky-network-query](https://github.com/navidys/opensky-network-query)) using this gopensky is also available to query the opensky network api.
-
 `NOTE:` there are some limitation sets for anonymous and OpenSky users, visit following links for more information:
 * [OpenSky Network Rest API documentation](https://openskynetwork.github.io/opensky-api/)
 * [OpenSky Network Website](https://opensky-network.org/).
