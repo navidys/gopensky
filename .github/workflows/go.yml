@@ -2,14 +2,13 @@ name: Go
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
-
-  build:
-    name: Build
+  Unit_test:
+    name: Unit test
     runs-on: ubuntu-latest
     steps:
 
@@ -24,14 +23,19 @@ jobs:
 
     - name: Get dependencies
       run: |
+        export GOBIN=$(pwd)/bin/
         make .install.ginkgo
 
     - name: Generate coverage report
-      run: make test-unit
+      run: |
+        export GOBIN=$(pwd)/bin/
+        make test-unit
 
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v1
+      uses: codecov/codecov-action@v3
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       with:
-        file: ./coverage/coverprofile
+        file: .coverage/coverprofile
         name: codecov-umbrella
         fail_ci_if_error: true
