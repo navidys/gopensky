@@ -3,6 +3,8 @@ GO := go
 SRC = $(shell find . -type f -name '*.go' -not -path "./vendor/*")
 PRE_COMMIT = $(shell command -v bin/venv/bin/pre-commit ~/.local/bin/pre-commit pre-commit | head -n1)
 PKG_MANAGER ?= $(shell command -v dnf yum|head -n1)
+GINKO_CLI_VERSION = $(shell grep 'ginkgo/v2' go.mod | grep -o ' v.*' | sed 's/ //g')
+COVERAGE_PATH ?= .coverage
 
 #=================================================
 # Build binary, documents
@@ -20,7 +22,7 @@ docs: ## Generates html documents
 #=================================================
 
 .PHONY: install.tools
-install.tools: .install.pre-commit .install.codespell .install.golangci-lint .install.sphinx-build## Install needed tools
+install.tools: .install.pre-commit .install.codespell .install.golangci-lint .install.sphinx-build .install.ginkgo## Install needed tools
 
 .PHONY: .install.codespell
 .install.codespell:
@@ -39,6 +41,12 @@ install.tools: .install.pre-commit .install.codespell .install.golangci-lint .in
 .PHONY: .install.sphinx-build
 .install.sphinx-build:
 	sudo ${PKG_MANAGER} -y install python-sphinx python-sphinx_rtd_theme
+
+.PHONY: .install.ginkgo
+.install.ginkgo:
+	if [ ! -x "$(GOBIN)/ginkgo" ]; then \
+		$(GO) install -mod=mod github.com/onsi/ginkgo/v2/ginkgo@$(GINKO_CLI_VERSION) ; \
+	fi
 
 #=================================================
 # Linting/Formatting/Code Validation targets
@@ -77,6 +85,21 @@ gofmt:   ## Run gofmt
 codespell: ## Run codespell
 	@echo "running codespell"
 	@codespell -S ./vendor,go.mod,go.sum,./.git,./docs/_build
+
+.PHONY: test-unit
+test-unit: ## Run unit tests
+	rm -rf ${COVERAGE_PATH} && mkdir -p ${COVERAGE_PATH}
+	$(GOBIN)/ginkgo \
+		-r \
+		--skip-package test/ \
+		--cover \
+		--covermode atomic \
+		--coverprofile coverprofile \
+		--output-dir ${COVERAGE_PATH} \
+		--succinct
+	$(GO) tool cover -html=${COVERAGE_PATH}/coverprofile -o ${COVERAGE_PATH}/coverage.html
+	$(GO) tool cover -func=${COVERAGE_PATH}/coverprofile > ${COVERAGE_PATH}/functions
+	cat ${COVERAGE_PATH}/functions | sed -n 's/\(total:\).*\([0-9][0-9].[0-9]\)/\1 \2/p'
 
 #=================================================
 # Help menu

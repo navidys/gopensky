@@ -29,3 +29,4 @@ bin/*
 
 _site/
 docs/_build/
+.coverage
