@@ -19,7 +19,7 @@ func GetTrackByAircraft(ctx context.Context, icao24 string, time int64) (FlightT
 	}
 
 	if time < 0 {
-		return flightTrack, ErrInvalidAircraftName
+		return flightTrack, ErrInvalidUnixTime
 	}
 
 	conn, err := getClient(ctx)
