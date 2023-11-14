@@ -1,6 +1,7 @@
 # Go OpenSKY Network API
-![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/navidys/gopensky)](https://pkg.go.dev/github.com/navidys/gopensky)
+![Go](https://github.com/navidys/gopensky/workflows/Go/badge.svg)
+[![codecov](https://codecov.io/gh/navidys/gopensky/branch/master/graph/badge.svg)](https://codecov.io/gh/mehanizm/airtable)
 [![Go Report](https://goreportcard.com/badge/github.com/navidys/gopensky)](https://goreportcard.com/report/github.com/navidys/gopensky)
 
 This is the golang implementation of the OpenSky network's live API.
