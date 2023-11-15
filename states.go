@@ -75,7 +75,7 @@ func getStateRequestParams(time int64, icao24 []string, bBox *BoundingBoxOptions
 		requestParams.Add("lamax", floatToString(bBox.Lamax))
 		requestParams.Add("lamin", floatToString(bBox.Lamin))
 		requestParams.Add("lomax", floatToString(bBox.Lomax))
-		requestParams.Add("lamax", floatToString(bBox.Lamax))
+		requestParams.Add("lomin", floatToString(bBox.Lomin))
 	}
 
 	return requestParams
