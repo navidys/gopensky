@@ -73,7 +73,7 @@ func parseFlightTrackResponse(response *FlightTrackResponse) (FlightTrack, error
 }
 
 func decodeWaypoint(data []interface{}) (*WayPoint, error) { //nolint:funlen,cyclop
-	if len(data) < trackOnGroundIndex {
+	if len(data) < trackOnGroundIndex+1 {
 		return nil, errWaypointsDataCount
 	}
 
