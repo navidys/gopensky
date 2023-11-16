@@ -1,9 +1,11 @@
 package gopensky
 
 var (
-	DecodeRawStateVector    = decodeRawStateVector
-	FloatToString           = floatToString
-	GetFlightsRequestParams = getFlightsRequestParams
-	GetTracksRequestParams  = getTracksRequestParams
-	GetStateRequestParams   = getStateRequestParams
+	DecodeRawStateVector     = decodeRawStateVector
+	DecodeWaypoint           = decodeWaypoint
+	FloatToString            = floatToString
+	GetFlightsRequestParams  = getFlightsRequestParams
+	GetTracksRequestParams   = getTracksRequestParams
+	GetStateRequestParams    = getStateRequestParams
+	ParseFlightTrackResponse = parseFlightTrackResponse
 )
