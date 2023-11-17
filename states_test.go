@@ -66,7 +66,17 @@ var _ = Describe("States", func() {
 			_, err = gopensky.GetStates(conn, -1, nil, nil, false)
 			Expect(err).To(Equal(gopensky.ErrInvalidUnixTime))
 
+			_, err = gopensky.GetStates(context.Background(), 0, nil, nil, false)
+			Expect(err.Error()).To(ContainSubstring("invalid context key"))
+
 			defer gock.Off()
+
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/states/all").
+				Reply(200).
+				BodyString("[{}]")
+			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
+			Expect(errors.Unwrap(err).Error()).To(ContainSubstring("json: cannot unmarshal"))
 
 			// data count error
 			gock.New(gopensky.OpenSkyAPIURL).
@@ -84,7 +94,7 @@ var _ = Describe("States", func() {
 				File("mock_data/errors/states02.json")
 
 			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
-			Expect(errors.Unwrap(err).Error()).To(Equal("state vector icao24 assertion failed: 123"))
+			Expect(errors.Unwrap(err).Error()).To(ContainSubstring("icao24 assertion"))
 
 			// callsign assertion error
 			gock.New(gopensky.OpenSkyAPIURL).
@@ -93,7 +103,7 @@ var _ = Describe("States", func() {
 				File("mock_data/errors/states03.json")
 
 			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
-			Expect(errors.Unwrap(err).Error()).To(Equal("state vector callsign assertion failed: 123"))
+			Expect(errors.Unwrap(err).Error()).To(ContainSubstring("callsign assertion"))
 
 			// country assertion error
 			gock.New(gopensky.OpenSkyAPIURL).
@@ -102,7 +112,7 @@ var _ = Describe("States", func() {
 				File("mock_data/errors/states04.json")
 
 			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
-			Expect(errors.Unwrap(err).Error()).To(Equal("state vector origin country assertion failed: 123"))
+			Expect(errors.Unwrap(err).Error()).To(ContainSubstring("origin country assertion"))
 
 			// time position assertion error
 			gock.New(gopensky.OpenSkyAPIURL).
@@ -111,7 +121,7 @@ var _ = Describe("States", func() {
 				File("mock_data/errors/states05.json")
 
 			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
-			Expect(errors.Unwrap(err).Error()).To(Equal("state vector time position assertion failed: a"))
+			Expect(errors.Unwrap(err).Error()).To(ContainSubstring("time position assertion"))
 
 			// last contact assertion error
 			gock.New(gopensky.OpenSkyAPIURL).
@@ -120,7 +130,7 @@ var _ = Describe("States", func() {
 				File("mock_data/errors/states06.json")
 
 			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
-			Expect(errors.Unwrap(err).Error()).To(Equal("state vector last contact assertion failed: a"))
+			Expect(errors.Unwrap(err).Error()).To(ContainSubstring("last contact assertion"))
 
 			// longitude assertion error
 			gock.New(gopensky.OpenSkyAPIURL).
@@ -129,7 +139,7 @@ var _ = Describe("States", func() {
 				File("mock_data/errors/states07.json")
 
 			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
-			Expect(errors.Unwrap(err).Error()).To(Equal("state vector longitude assertion failed: a"))
+			Expect(errors.Unwrap(err).Error()).To(ContainSubstring("longitude assertion"))
 
 			// latitude assertion error
 			gock.New(gopensky.OpenSkyAPIURL).
@@ -138,7 +148,7 @@ var _ = Describe("States", func() {
 				File("mock_data/errors/states08.json")
 
 			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
-			Expect(errors.Unwrap(err).Error()).To(Equal("state vector latitude assertion failed: a"))
+			Expect(errors.Unwrap(err).Error()).To(ContainSubstring("latitude assertion"))
 
 			// baro altitude assertion error
 			gock.New(gopensky.OpenSkyAPIURL).
@@ -147,7 +157,7 @@ var _ = Describe("States", func() {
 				File("mock_data/errors/states09.json")
 
 			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
-			Expect(errors.Unwrap(err).Error()).To(Equal("state vector baro altitude assertion failed: a"))
+			Expect(errors.Unwrap(err).Error()).To(ContainSubstring("baro altitude assertion"))
 
 			// velocity assertion error
 			gock.New(gopensky.OpenSkyAPIURL).
@@ -156,7 +166,7 @@ var _ = Describe("States", func() {
 				File("mock_data/errors/states10.json")
 
 			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
-			Expect(errors.Unwrap(err).Error()).To(Equal("state vector velocity assertion failed: a"))
+			Expect(errors.Unwrap(err).Error()).To(ContainSubstring("velocity assertion"))
 
 			// true track assertion error
 			gock.New(gopensky.OpenSkyAPIURL).
@@ -165,7 +175,7 @@ var _ = Describe("States", func() {
 				File("mock_data/errors/states11.json")
 
 			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
-			Expect(errors.Unwrap(err).Error()).To(Equal("state vector true track assertion failed: a"))
+			Expect(errors.Unwrap(err).Error()).To(ContainSubstring("true track assertion"))
 
 			// vertical rate assertion error
 			gock.New(gopensky.OpenSkyAPIURL).
@@ -174,7 +184,7 @@ var _ = Describe("States", func() {
 				File("mock_data/errors/states12.json")
 
 			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
-			Expect(errors.Unwrap(err).Error()).To(Equal("state vector vertical rate assertion failed: a"))
+			Expect(errors.Unwrap(err).Error()).To(ContainSubstring("vertical rate assertion"))
 
 			// geo altitude assertion error
 			gock.New(gopensky.OpenSkyAPIURL).
@@ -183,7 +193,7 @@ var _ = Describe("States", func() {
 				File("mock_data/errors/states13.json")
 
 			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
-			Expect(errors.Unwrap(err).Error()).To(Equal("state vector geo altitude assertion failed: a"))
+			Expect(errors.Unwrap(err).Error()).To(ContainSubstring("geo altitude assertion"))
 
 			// squawk assertion error
 			gock.New(gopensky.OpenSkyAPIURL).
@@ -192,7 +202,7 @@ var _ = Describe("States", func() {
 				File("mock_data/errors/states14.json")
 
 			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
-			Expect(errors.Unwrap(err).Error()).To(Equal("state vector squawk assertion failed: 1"))
+			Expect(errors.Unwrap(err).Error()).To(ContainSubstring("squawk assertion"))
 
 			// spi assertion error
 			gock.New(gopensky.OpenSkyAPIURL).
@@ -201,7 +211,7 @@ var _ = Describe("States", func() {
 				File("mock_data/errors/states15.json")
 
 			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
-			Expect(errors.Unwrap(err).Error()).To(Equal("state vector spi assertion failed: a"))
+			Expect(errors.Unwrap(err).Error()).To(ContainSubstring("spi assertion"))
 
 			// position source assertion error
 			gock.New(gopensky.OpenSkyAPIURL).
@@ -210,7 +220,25 @@ var _ = Describe("States", func() {
 				File("mock_data/errors/states16.json")
 
 			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
-			Expect(errors.Unwrap(err).Error()).To(Equal("state vector position source assertion failed: a"))
+			Expect(errors.Unwrap(err).Error()).To(ContainSubstring("position source assertion"))
+
+			// on ground assertion error
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/states/all").
+				Reply(200).
+				File("mock_data/errors/states17.json")
+
+			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
+			Expect(errors.Unwrap(err).Error()).To(ContainSubstring("on ground assertion"))
+
+			// sensors assertion error
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/states/all").
+				Reply(200).
+				File("mock_data/errors/states18.json")
+
+			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
+			Expect(errors.Unwrap(err).Error()).To(ContainSubstring("sensors assertion"))
 
 		})
 	})

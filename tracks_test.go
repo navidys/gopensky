@@ -2,6 +2,7 @@ package gopensky_test
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/h2non/gock"
@@ -42,11 +43,38 @@ var _ = Describe("Tracks", func() {
 			conn, err := gopensky.NewConnection(context.Background(), "", "")
 			Expect(err).NotTo(HaveOccurred())
 
+			gclient, err := gopensky.GetClient(conn)
+			Expect(err).NotTo(HaveOccurred())
+			gock.InterceptClient(gclient)
+
+			_, err = gopensky.GetTrackByAircraft(context.Background(), "a835af", 1696755342)
+			Expect(err.Error()).To(ContainSubstring("invalid context key"))
+
 			_, err = gopensky.GetTrackByAircraft(conn, "", 1696755342)
 			Expect(err).To(Equal(gopensky.ErrInvalidAircraftName))
 
 			_, err = gopensky.GetTrackByAircraft(conn, "a835af", -1)
 			Expect(err).To(Equal(gopensky.ErrInvalidUnixTime))
+
+			defer gock.Off()
+
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/tracks/all").
+				Reply(200).
+				BodyString("{'a': 2}")
+
+			_, err = gopensky.GetTrackByAircraft(conn, "c060b9", 1689193028)
+			Expect(err.Error()).To(ContainSubstring("unmarshalling"))
+
+			for _, tfile := range []string{"tracks01.json", "tracks02.json", "tracks03.json", "tracks04.json"} {
+				gock.New(gopensky.OpenSkyAPIURL).
+					Get("/tracks/all").
+					Reply(200).
+					File("mock_data/errors/" + tfile)
+
+				_, err = gopensky.GetTrackByAircraft(conn, "c060b9", 1689193028)
+				Expect(errors.Unwrap(err).Error()).To(ContainSubstring("json: cannot unmarshal"))
+			}
 		})
 	})
 

@@ -53,15 +53,19 @@ var _ = Describe("Flights", func() {
 			conn, err := gopensky.NewConnection(context.Background(), "", "")
 			Expect(err).NotTo(HaveOccurred())
 
-			defer gock.Off()
-			gock.New(gopensky.OpenSkyAPIURL).
-				Get("/flights/arrival").
-				Reply(200).
-				File("mock_data/flights_data.json")
-
 			gclient, err := gopensky.GetClient(conn)
 			Expect(err).NotTo(HaveOccurred())
 			gock.InterceptClient(gclient)
+
+			defer gock.Off()
+
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/flights/arrival").
+				Reply(200).
+				BodyString("s")
+
+			_, err = gopensky.GetArrivalsByAirport(conn, "KEWR", 1696755342, 1696928142)
+			Expect(err.Error()).To(ContainSubstring("unmarshalling"))
 
 			_, err = gopensky.GetArrivalsByAirport(conn, "", 1696755342, 1696928142)
 			Expect(err).To(Equal(gopensky.ErrInvalidAirportName))
@@ -71,6 +75,14 @@ var _ = Describe("Flights", func() {
 
 			_, err = gopensky.GetArrivalsByAirport(conn, "KEWR", 1696755342, -1)
 			Expect(err).To(Equal(gopensky.ErrInvalidUnixTime))
+
+			_, err = gopensky.GetArrivalsByAirport(context.Background(), "KEWR", 1696755342, 1696928142)
+			Expect(err.Error()).To(ContainSubstring("invalid context key"))
+
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/flights/arrival").
+				Reply(200).
+				File("mock_data/flights_data.json")
 
 			flightData, err := gopensky.GetArrivalsByAirport(conn, "KEWR", 1696755342, 1696928142)
 			Expect(err).NotTo(HaveOccurred())
@@ -96,15 +108,19 @@ var _ = Describe("Flights", func() {
 			conn, err := gopensky.NewConnection(context.Background(), "", "")
 			Expect(err).NotTo(HaveOccurred())
 
-			defer gock.Off()
-			gock.New(gopensky.OpenSkyAPIURL).
-				Get("/flights/departure").
-				Reply(200).
-				File("mock_data/flights_data.json")
-
 			gclient, err := gopensky.GetClient(conn)
 			Expect(err).NotTo(HaveOccurred())
 			gock.InterceptClient(gclient)
+
+			defer gock.Off()
+
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/flights/departure").
+				Reply(200).
+				BodyString("s")
+
+			_, err = gopensky.GetDeparturesByAirport(conn, "KEWR", 1696755342, 1696928142)
+			Expect(err.Error()).To(ContainSubstring("unmarshalling"))
 
 			_, err = gopensky.GetDeparturesByAirport(conn, "", 1696755342, 1696928142)
 			Expect(err).To(Equal(gopensky.ErrInvalidAirportName))
@@ -114,6 +130,14 @@ var _ = Describe("Flights", func() {
 
 			_, err = gopensky.GetDeparturesByAirport(conn, "KEWR", 1696755342, -1)
 			Expect(err).To(Equal(gopensky.ErrInvalidUnixTime))
+
+			_, err = gopensky.GetDeparturesByAirport(context.Background(), "KEWR", 1696755342, 1696928142)
+			Expect(err.Error()).To(ContainSubstring("invalid context key"))
+
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/flights/departure").
+				Reply(200).
+				File("mock_data/flights_data.json")
 
 			flightData, err := gopensky.GetDeparturesByAirport(conn, "KEWR", 1696755342, 1696928142)
 			Expect(err).NotTo(HaveOccurred())
@@ -139,21 +163,33 @@ var _ = Describe("Flights", func() {
 			conn, err := gopensky.NewConnection(context.Background(), "", "")
 			Expect(err).NotTo(HaveOccurred())
 
-			defer gock.Off()
-			gock.New(gopensky.OpenSkyAPIURL).
-				Get("/flights/all").
-				Reply(200).
-				File("mock_data/flights_data.json")
-
 			gclient, err := gopensky.GetClient(conn)
 			Expect(err).NotTo(HaveOccurred())
 			gock.InterceptClient(gclient)
+
+			defer gock.Off()
+
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/flights/all").
+				Reply(200).
+				BodyString("s")
+
+			_, err = gopensky.GetFlightsByInterval(conn, 1696755342, 1696928142)
+			Expect(err.Error()).To(ContainSubstring("unmarshalling"))
 
 			_, err = gopensky.GetFlightsByInterval(conn, 0, 1696928142)
 			Expect(err).To(Equal(gopensky.ErrInvalidUnixTime))
 
 			_, err = gopensky.GetFlightsByInterval(conn, 1696755342, -1)
 			Expect(err).To(Equal(gopensky.ErrInvalidUnixTime))
+
+			_, err = gopensky.GetFlightsByInterval(context.Background(), 1696755342, 1696928142)
+			Expect(err.Error()).To(ContainSubstring("invalid context key"))
+
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/flights/all").
+				Reply(200).
+				File("mock_data/flights_data.json")
 
 			flightData, err := gopensky.GetFlightsByInterval(conn, 1696755342, 1696928142)
 			Expect(err).NotTo(HaveOccurred())
@@ -179,15 +215,23 @@ var _ = Describe("Flights", func() {
 			conn, err := gopensky.NewConnection(context.Background(), "", "")
 			Expect(err).NotTo(HaveOccurred())
 
+			gclient, err := gopensky.GetClient(conn)
+			Expect(err).NotTo(HaveOccurred())
+			gock.InterceptClient(gclient)
+
 			defer gock.Off()
 			gock.New(gopensky.OpenSkyAPIURL).
 				Get("/flights/aircraft").
 				Reply(200).
-				File("mock_data/flights_data.json")
+				BodyString("s")
 
-			gclient, err := gopensky.GetClient(conn)
-			Expect(err).NotTo(HaveOccurred())
-			gock.InterceptClient(gclient)
+			_, err = gopensky.GetFlightsByAircraft(conn, "c060b9", 1696755342, 1696928142)
+			Expect(err.Error()).To(ContainSubstring("unmarshalling"))
+
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/flights/aircraft").
+				Reply(200).
+				File("mock_data/flights_data.json")
 
 			_, err = gopensky.GetFlightsByAircraft(conn, "", 0, 1696928142)
 			Expect(err).To(Equal(gopensky.ErrInvalidAircraftName))
@@ -197,6 +241,9 @@ var _ = Describe("Flights", func() {
 
 			_, err = gopensky.GetFlightsByAircraft(conn, "c060b9", 1696755342, -1)
 			Expect(err).To(Equal(gopensky.ErrInvalidUnixTime))
+
+			_, err = gopensky.GetFlightsByAircraft(context.Background(), "c060b9", 1696755342, 1696928142)
+			Expect(err.Error()).To(ContainSubstring("invalid context key"))
 
 			flightData, err := gopensky.GetFlightsByAircraft(conn, "c060b9", 1696755342, 1696928142)
 			Expect(err).NotTo(HaveOccurred())
