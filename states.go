@@ -87,7 +87,7 @@ func decodeRawStateVector(data []interface{}) (*StateVector, error) { //nolint:f
 	stVector := StateVector{}
 	recvDataCount := len(data)
 
-	if recvDataCount < stateVecCategoryIndex+1 {
+	if recvDataCount < stateVecCategoryIndex {
 		return nil, errStateVecDataCount
 	}
 

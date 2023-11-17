@@ -3,7 +3,9 @@ package gopensky_test
 import (
 	"context"
 	"fmt"
+	"strings"
 
+	"github.com/h2non/gock"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
@@ -16,8 +18,41 @@ var _ = Describe("States", func() {
 			conn, err := gopensky.NewConnection(context.Background(), "", "")
 			Expect(err).NotTo(HaveOccurred())
 
+			defer gock.Off()
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/states/all").
+				Reply(200).
+				File("mock_data/all_states.json")
+
+			gclient, err := gopensky.GetClient(conn)
+			Expect(err).NotTo(HaveOccurred())
+			gock.InterceptClient(gclient)
+
 			_, err = gopensky.GetStates(conn, -1, nil, nil, false)
 			Expect(err).To(Equal(gopensky.ErrInvalidUnixTime))
+
+			states, err := gopensky.GetStates(conn, 0, nil, nil, false)
+			Expect(err).NotTo(HaveOccurred())
+			Expect(len(states.States)).To(Equal(6))
+
+			firstState := states.States[0]
+			Expect(firstState.Icao24).To(Equal("ac96b8"))
+			Expect(strings.TrimSpace(*firstState.Callsign)).To(Equal("AAL2423"))
+			Expect(firstState.OriginCountry).To(Equal("United States"))
+			Expect(*firstState.TimePosition).To(Equal(int64(1518552809)))
+			Expect(firstState.LastContact).To(Equal(int64(1518552809)))
+			Expect(*firstState.Longitude).To(Equal(-93.4581))
+			Expect(*firstState.Latitude).To(Equal(44.9529))
+			Expect(*firstState.BaroAltitude).To(Equal(1150.62))
+			Expect(firstState.OnGround).To(Equal(false))
+			Expect(*firstState.Velocity).To(Equal(116.59))
+			Expect(*firstState.TrueTrack).To(Equal(94.3))
+			Expect(*firstState.VerticalRate).To(Equal(float64(0)))
+			Expect(firstState.Sensors).To(BeNil())
+			Expect(*firstState.GeoAltitude).To(Equal(float64(1143)))
+			Expect(*firstState.Squawk).To(Equal("2236"))
+			Expect(firstState.Spi).To(Equal(false))
+			Expect(firstState.PositionSource).To(Equal(0))
 		})
 	})
 
