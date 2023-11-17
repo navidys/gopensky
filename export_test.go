@@ -15,6 +15,8 @@ var (
 	GetStateRequestParams    = getStateRequestParams
 	ParseFlightTrackResponse = parseFlightTrackResponse
 	OpenSkyAPIURL            = openSkyAPIURL
+	NewConnectionError       = newConnectionError
+	HandleError              = handleError
 )
 
 func GetClient(ctx context.Context) (*http.Client, error) {
