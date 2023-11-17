@@ -2,6 +2,7 @@ package gopensky_test
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"strings"
 
@@ -28,9 +29,6 @@ var _ = Describe("States", func() {
 			Expect(err).NotTo(HaveOccurred())
 			gock.InterceptClient(gclient)
 
-			_, err = gopensky.GetStates(conn, -1, nil, nil, false)
-			Expect(err).To(Equal(gopensky.ErrInvalidUnixTime))
-
 			states, err := gopensky.GetStates(conn, 0, nil, nil, false)
 			Expect(err).NotTo(HaveOccurred())
 			Expect(len(states.States)).To(Equal(6))
@@ -53,6 +51,167 @@ var _ = Describe("States", func() {
 			Expect(*firstState.Squawk).To(Equal("2236"))
 			Expect(firstState.Spi).To(Equal(false))
 			Expect(firstState.PositionSource).To(Equal(0))
+		})
+	})
+
+	Describe("GetStates - errors", func() {
+		It("tests getstates errors", func() {
+			conn, err := gopensky.NewConnection(context.Background(), "", "")
+			Expect(err).NotTo(HaveOccurred())
+
+			gclient, err := gopensky.GetClient(conn)
+			Expect(err).NotTo(HaveOccurred())
+			gock.InterceptClient(gclient)
+
+			_, err = gopensky.GetStates(conn, -1, nil, nil, false)
+			Expect(err).To(Equal(gopensky.ErrInvalidUnixTime))
+
+			defer gock.Off()
+
+			// data count error
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/states/all").
+				Reply(200).
+				File("mock_data/errors/states01.json")
+
+			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
+			Expect(errors.Unwrap(err).Error()).To(Equal("invalid state vector data count"))
+
+			// icao24 assertion error
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/states/all").
+				Reply(200).
+				File("mock_data/errors/states02.json")
+
+			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
+			Expect(errors.Unwrap(err).Error()).To(Equal("state vector icao24 assertion failed: 123"))
+
+			// callsign assertion error
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/states/all").
+				Reply(200).
+				File("mock_data/errors/states03.json")
+
+			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
+			Expect(errors.Unwrap(err).Error()).To(Equal("state vector callsign assertion failed: 123"))
+
+			// country assertion error
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/states/all").
+				Reply(200).
+				File("mock_data/errors/states04.json")
+
+			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
+			Expect(errors.Unwrap(err).Error()).To(Equal("state vector origin country assertion failed: 123"))
+
+			// time position assertion error
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/states/all").
+				Reply(200).
+				File("mock_data/errors/states05.json")
+
+			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
+			Expect(errors.Unwrap(err).Error()).To(Equal("state vector time position assertion failed: a"))
+
+			// last contact assertion error
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/states/all").
+				Reply(200).
+				File("mock_data/errors/states06.json")
+
+			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
+			Expect(errors.Unwrap(err).Error()).To(Equal("state vector last contact assertion failed: a"))
+
+			// longitude assertion error
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/states/all").
+				Reply(200).
+				File("mock_data/errors/states07.json")
+
+			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
+			Expect(errors.Unwrap(err).Error()).To(Equal("state vector longitude assertion failed: a"))
+
+			// latitude assertion error
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/states/all").
+				Reply(200).
+				File("mock_data/errors/states08.json")
+
+			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
+			Expect(errors.Unwrap(err).Error()).To(Equal("state vector latitude assertion failed: a"))
+
+			// baro altitude assertion error
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/states/all").
+				Reply(200).
+				File("mock_data/errors/states09.json")
+
+			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
+			Expect(errors.Unwrap(err).Error()).To(Equal("state vector baro altitude assertion failed: a"))
+
+			// velocity assertion error
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/states/all").
+				Reply(200).
+				File("mock_data/errors/states10.json")
+
+			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
+			Expect(errors.Unwrap(err).Error()).To(Equal("state vector velocity assertion failed: a"))
+
+			// true track assertion error
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/states/all").
+				Reply(200).
+				File("mock_data/errors/states11.json")
+
+			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
+			Expect(errors.Unwrap(err).Error()).To(Equal("state vector true track assertion failed: a"))
+
+			// vertical rate assertion error
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/states/all").
+				Reply(200).
+				File("mock_data/errors/states12.json")
+
+			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
+			Expect(errors.Unwrap(err).Error()).To(Equal("state vector vertical rate assertion failed: a"))
+
+			// geo altitude assertion error
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/states/all").
+				Reply(200).
+				File("mock_data/errors/states13.json")
+
+			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
+			Expect(errors.Unwrap(err).Error()).To(Equal("state vector geo altitude assertion failed: a"))
+
+			// squawk assertion error
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/states/all").
+				Reply(200).
+				File("mock_data/errors/states14.json")
+
+			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
+			Expect(errors.Unwrap(err).Error()).To(Equal("state vector squawk assertion failed: 1"))
+
+			// spi assertion error
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/states/all").
+				Reply(200).
+				File("mock_data/errors/states15.json")
+
+			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
+			Expect(errors.Unwrap(err).Error()).To(Equal("state vector spi assertion failed: a"))
+
+			// position source assertion error
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/states/all").
+				Reply(200).
+				File("mock_data/errors/states16.json")
+
+			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
+			Expect(errors.Unwrap(err).Error()).To(Equal("state vector position source assertion failed: a"))
+
 		})
 	})
 
