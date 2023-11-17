@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/h2non/gock"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
@@ -13,6 +14,31 @@ import (
 var _ = Describe("Tracks", func() {
 	Describe("GetTrackByAircraft", func() {
 		It("retrieves the trajectory for a certain aircraft at a given time", func() {
+			conn, err := gopensky.NewConnection(context.Background(), "", "")
+			Expect(err).NotTo(HaveOccurred())
+
+			defer gock.Off()
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/tracks/all").
+				Reply(200).
+				File("mock_data/all_tracks.json")
+
+			gclient, err := gopensky.GetClient(conn)
+			Expect(err).NotTo(HaveOccurred())
+			gock.InterceptClient(gclient)
+
+			track, err := gopensky.GetTrackByAircraft(conn, "c060b9", 1689193028)
+			Expect(err).NotTo(HaveOccurred())
+			Expect(track.Icao24).To(Equal("c060b9"))
+			Expect(*track.Callsign).To(Equal("POE2136"))
+			Expect(track.StartTime).To(Equal(int64(1689193028)))
+			Expect(track.EndTime).To(Equal(int64(1689197805)))
+			Expect(track.Path).To(BeNil())
+		})
+	})
+
+	Describe("GetTrackByAircraft - errors", func() {
+		It("tests GetTrackByAircraft errors", func() {
 			conn, err := gopensky.NewConnection(context.Background(), "", "")
 			Expect(err).NotTo(HaveOccurred())
 
