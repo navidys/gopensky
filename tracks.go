@@ -56,8 +56,11 @@ func parseFlightTrackResponse(response *FlightTrackResponse) (FlightTrack, error
 	flightTrack.EndTime = time.Unix(int64(response.EndTime), 0).Unix()
 	// the api is not returning proper start time value
 	// temporary checking if its <= 0 then allocated 1
-	if flightTrack.StartTime <= 0 {
+	startTime := time.Unix(int64(response.StartTime), 0).Unix()
+	if startTime <= 0 {
 		flightTrack.StartTime = 1
+	} else {
+		flightTrack.StartTime = startTime
 	}
 
 	for _, waypointData := range response.Path {
