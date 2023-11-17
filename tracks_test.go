@@ -66,6 +66,14 @@ var _ = Describe("Tracks", func() {
 			_, err = gopensky.GetTrackByAircraft(conn, "c060b9", 1689193028)
 			Expect(err.Error()).To(ContainSubstring("unmarshalling"))
 
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/tracks/invalid").
+				Reply(200).
+				BodyString("")
+
+			_, err = gopensky.GetTrackByAircraft(conn, "c060b9", 1689193028)
+			Expect(err.Error()).To(ContainSubstring("do request: Get"))
+
 			for _, tfile := range []string{"tracks01.json", "tracks02.json", "tracks03.json", "tracks04.json"} {
 				gock.New(gopensky.OpenSkyAPIURL).
 					Get("/tracks/all").

@@ -72,6 +72,13 @@ var _ = Describe("States", func() {
 			defer gock.Off()
 
 			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/states/invalid").
+				Reply(200).
+				BodyString("")
+			_, err = gopensky.GetStates(conn, 0, nil, nil, false)
+			Expect(err.Error()).To(ContainSubstring("do request: Get"))
+
+			gock.New(gopensky.OpenSkyAPIURL).
 				Get("/states/all").
 				Reply(200).
 				BodyString("[{}]")

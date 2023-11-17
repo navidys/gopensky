@@ -60,6 +60,14 @@ var _ = Describe("Flights", func() {
 			defer gock.Off()
 
 			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/flights/invalid").
+				Reply(200).
+				BodyString("")
+
+			_, err = gopensky.GetArrivalsByAirport(conn, "KEWR", 1696755342, 1696928142)
+			Expect(err.Error()).To(ContainSubstring("do request: Get"))
+
+			gock.New(gopensky.OpenSkyAPIURL).
 				Get("/flights/arrival").
 				Reply(200).
 				BodyString("s")
@@ -113,6 +121,14 @@ var _ = Describe("Flights", func() {
 			gock.InterceptClient(gclient)
 
 			defer gock.Off()
+
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/flights/invalid").
+				Reply(200).
+				BodyString("")
+
+			_, err = gopensky.GetDeparturesByAirport(conn, "KEWR", 1696755342, 1696928142)
+			Expect(err.Error()).To(ContainSubstring("do request: Get"))
 
 			gock.New(gopensky.OpenSkyAPIURL).
 				Get("/flights/departure").
@@ -170,6 +186,14 @@ var _ = Describe("Flights", func() {
 			defer gock.Off()
 
 			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/flights/invalid").
+				Reply(200).
+				BodyString("")
+
+			_, err = gopensky.GetFlightsByInterval(conn, 1696755342, 1696928142)
+			Expect(err.Error()).To(ContainSubstring("do request: Get"))
+
+			gock.New(gopensky.OpenSkyAPIURL).
 				Get("/flights/all").
 				Reply(200).
 				BodyString("s")
@@ -220,6 +244,15 @@ var _ = Describe("Flights", func() {
 			gock.InterceptClient(gclient)
 
 			defer gock.Off()
+
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/flights/invalid").
+				Reply(200).
+				BodyString("")
+
+			_, err = gopensky.GetFlightsByAircraft(conn, "c060b9", 1696755342, 1696928142)
+			Expect(err.Error()).To(ContainSubstring("do request: Get"))
+
 			gock.New(gopensky.OpenSkyAPIURL).
 				Get("/flights/aircraft").
 				Reply(200).
