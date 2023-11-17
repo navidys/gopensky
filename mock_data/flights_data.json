@@ -1,0 +1,41 @@
+[
+  {
+    "icao24": "c060b9",
+    "callsign": "POE2136",
+    "firstSeen": 1689193028,
+    "lastSeen": 1689197805,
+    "EstArrivalAirport": "KEWR",
+    "arrivalAirportCandidatesCount": 3,
+    "estDepartureAirportHorizDistance": 357,
+    "estDepartureAirportVertDistance": 24,
+    "estArrivalAirportHorizDistance": 591,
+    "estArrivalAirportVertDistance": 14,
+    "departureAirportCandidatesCount": 1
+  },
+  {
+    "icao24": "c060b9",
+    "callsign": "RPA3462",
+    "firstSeen": 1689192822,
+    "lastSeen": 1689196463,
+    "estDepartureAirport": "KEWR",
+    "arrivalAirportCandidatesCount": 6,
+    "estDepartureAirportHorizDistance": 788,
+    "estDepartureAirportVertDistance": 9,
+    "estArrivalAirportHorizDistance": 201,
+    "estArrivalAirportVertDistance": 30,
+    "departureAirportCandidatesCount": 1
+  },
+  {
+    "icao24": "c060b9",
+    "callsign": "N401TD",
+    "firstSeen": 1689192818,
+    "lastSeen": 1689198430,
+    "EstArrivalAirport": "KEWR",
+    "arrivalAirportCandidatesCount": 4,
+    "estDepartureAirportHorizDistance": 13461,
+    "estDepartureAirportVertDistance": 24,
+    "estArrivalAirportHorizDistance": 204,
+    "estArrivalAirportVertDistance": 8,
+    "departureAirportCandidatesCount": 1
+  }
+]

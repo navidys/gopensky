@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/h2non/gock"
 	"github.com/navidys/gopensky"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -52,14 +53,41 @@ var _ = Describe("Flights", func() {
 			conn, err := gopensky.NewConnection(context.Background(), "", "")
 			Expect(err).NotTo(HaveOccurred())
 
+			defer gock.Off()
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/flights/arrival").
+				Reply(200).
+				File("mock_data/flights_data.json")
+
+			gclient, err := gopensky.GetClient(conn)
+			Expect(err).NotTo(HaveOccurred())
+			gock.InterceptClient(gclient)
+
 			_, err = gopensky.GetArrivalsByAirport(conn, "", 1696755342, 1696928142)
 			Expect(err).To(Equal(gopensky.ErrInvalidAirportName))
 
-			_, err = gopensky.GetArrivalsByAirport(conn, "LFPG", 0, 1696928142)
+			_, err = gopensky.GetArrivalsByAirport(conn, "KEWR", 0, 1696928142)
 			Expect(err).To(Equal(gopensky.ErrInvalidUnixTime))
 
-			_, err = gopensky.GetArrivalsByAirport(conn, "LFPG", 1696755342, -1)
+			_, err = gopensky.GetArrivalsByAirport(conn, "KEWR", 1696755342, -1)
 			Expect(err).To(Equal(gopensky.ErrInvalidUnixTime))
+
+			flightData, err := gopensky.GetArrivalsByAirport(conn, "KEWR", 1696755342, 1696928142)
+			Expect(err).NotTo(HaveOccurred())
+			Expect(len(flightData)).To(Equal(3))
+
+			Expect(flightData[0].Icao24).To(Equal("c060b9"))
+			Expect(*(flightData[0].Callsign)).To(Equal("POE2136"))
+			Expect(flightData[0].FirstSeen).To(Equal(int64(1689193028)))
+			Expect(flightData[0].LastSeen).To(Equal(int64(1689197805)))
+			Expect(*(flightData[0].EstArrivalAirport)).To(Equal("KEWR"))
+			Expect(flightData[0].EstDepartureAirport).To(BeNil())
+			Expect(flightData[0].ArrivalAirportCandidatesCount).To(Equal(3))
+			Expect(flightData[0].EstDepartureAirportHorizDistance).To(Equal(int64(357)))
+			Expect(flightData[0].EstDepartureAirportVertDistance).To(Equal(int64(24)))
+			Expect(flightData[0].EstArrivalAirportHorizDistance).To(Equal(int64(591)))
+			Expect(flightData[0].EstArrivalAirportVertDistance).To(Equal(int64(14)))
+			Expect(flightData[0].DepartureAirportCandidatesCount).To(Equal(1))
 		})
 	})
 
@@ -68,14 +96,41 @@ var _ = Describe("Flights", func() {
 			conn, err := gopensky.NewConnection(context.Background(), "", "")
 			Expect(err).NotTo(HaveOccurred())
 
+			defer gock.Off()
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/flights/departure").
+				Reply(200).
+				File("mock_data/flights_data.json")
+
+			gclient, err := gopensky.GetClient(conn)
+			Expect(err).NotTo(HaveOccurred())
+			gock.InterceptClient(gclient)
+
 			_, err = gopensky.GetDeparturesByAirport(conn, "", 1696755342, 1696928142)
 			Expect(err).To(Equal(gopensky.ErrInvalidAirportName))
 
-			_, err = gopensky.GetDeparturesByAirport(conn, "LFPG", 0, 1696928142)
+			_, err = gopensky.GetDeparturesByAirport(conn, "KEWR", 0, 1696928142)
 			Expect(err).To(Equal(gopensky.ErrInvalidUnixTime))
 
-			_, err = gopensky.GetDeparturesByAirport(conn, "LFPG", 1696755342, -1)
+			_, err = gopensky.GetDeparturesByAirport(conn, "KEWR", 1696755342, -1)
 			Expect(err).To(Equal(gopensky.ErrInvalidUnixTime))
+
+			flightData, err := gopensky.GetDeparturesByAirport(conn, "KEWR", 1696755342, 1696928142)
+			Expect(err).NotTo(HaveOccurred())
+			Expect(len(flightData)).To(Equal(3))
+
+			Expect(flightData[1].Icao24).To(Equal("c060b9"))
+			Expect(*(flightData[1].Callsign)).To(Equal("RPA3462"))
+			Expect(flightData[1].FirstSeen).To(Equal(int64(1689192822)))
+			Expect(flightData[1].LastSeen).To(Equal(int64(1689196463)))
+			Expect(*(flightData[1].EstDepartureAirport)).To(Equal("KEWR"))
+			Expect(flightData[1].EstArrivalAirport).To(BeNil())
+			Expect(flightData[1].ArrivalAirportCandidatesCount).To(Equal(6))
+			Expect(flightData[1].EstDepartureAirportHorizDistance).To(Equal(int64(788)))
+			Expect(flightData[1].EstDepartureAirportVertDistance).To(Equal(int64(9)))
+			Expect(flightData[1].EstArrivalAirportHorizDistance).To(Equal(int64(201)))
+			Expect(flightData[1].EstArrivalAirportVertDistance).To(Equal(int64(30)))
+			Expect(flightData[1].DepartureAirportCandidatesCount).To(Equal(1))
 		})
 	})
 
@@ -84,11 +139,38 @@ var _ = Describe("Flights", func() {
 			conn, err := gopensky.NewConnection(context.Background(), "", "")
 			Expect(err).NotTo(HaveOccurred())
 
+			defer gock.Off()
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/flights/all").
+				Reply(200).
+				File("mock_data/flights_data.json")
+
+			gclient, err := gopensky.GetClient(conn)
+			Expect(err).NotTo(HaveOccurred())
+			gock.InterceptClient(gclient)
+
 			_, err = gopensky.GetFlightsByInterval(conn, 0, 1696928142)
 			Expect(err).To(Equal(gopensky.ErrInvalidUnixTime))
 
 			_, err = gopensky.GetFlightsByInterval(conn, 1696755342, -1)
 			Expect(err).To(Equal(gopensky.ErrInvalidUnixTime))
+
+			flightData, err := gopensky.GetFlightsByInterval(conn, 1696755342, 1696928142)
+			Expect(err).NotTo(HaveOccurred())
+			Expect(len(flightData)).To(Equal(3))
+
+			Expect(flightData[0].Icao24).To(Equal("c060b9"))
+			Expect(*(flightData[0].Callsign)).To(Equal("POE2136"))
+			Expect(flightData[0].FirstSeen).To(Equal(int64(1689193028)))
+			Expect(flightData[0].LastSeen).To(Equal(int64(1689197805)))
+			Expect(*(flightData[0].EstArrivalAirport)).To(Equal("KEWR"))
+			Expect(flightData[0].EstDepartureAirport).To(BeNil())
+			Expect(flightData[0].ArrivalAirportCandidatesCount).To(Equal(3))
+			Expect(flightData[0].EstDepartureAirportHorizDistance).To(Equal(int64(357)))
+			Expect(flightData[0].EstDepartureAirportVertDistance).To(Equal(int64(24)))
+			Expect(flightData[0].EstArrivalAirportHorizDistance).To(Equal(int64(591)))
+			Expect(flightData[0].EstArrivalAirportVertDistance).To(Equal(int64(14)))
+			Expect(flightData[0].DepartureAirportCandidatesCount).To(Equal(1))
 		})
 	})
 
@@ -97,14 +179,41 @@ var _ = Describe("Flights", func() {
 			conn, err := gopensky.NewConnection(context.Background(), "", "")
 			Expect(err).NotTo(HaveOccurred())
 
+			defer gock.Off()
+			gock.New(gopensky.OpenSkyAPIURL).
+				Get("/flights/aircraft").
+				Reply(200).
+				File("mock_data/flights_data.json")
+
+			gclient, err := gopensky.GetClient(conn)
+			Expect(err).NotTo(HaveOccurred())
+			gock.InterceptClient(gclient)
+
 			_, err = gopensky.GetFlightsByAircraft(conn, "", 0, 1696928142)
 			Expect(err).To(Equal(gopensky.ErrInvalidAircraftName))
 
-			_, err = gopensky.GetFlightsByAircraft(conn, "a835af", 0, 1696928142)
+			_, err = gopensky.GetFlightsByAircraft(conn, "c060b9", 0, 1696928142)
 			Expect(err).To(Equal(gopensky.ErrInvalidUnixTime))
 
-			_, err = gopensky.GetFlightsByAircraft(conn, "a835af", 1696755342, -1)
+			_, err = gopensky.GetFlightsByAircraft(conn, "c060b9", 1696755342, -1)
 			Expect(err).To(Equal(gopensky.ErrInvalidUnixTime))
+
+			flightData, err := gopensky.GetFlightsByAircraft(conn, "c060b9", 1696755342, 1696928142)
+			Expect(err).NotTo(HaveOccurred())
+			Expect(len(flightData)).To(Equal(3))
+
+			Expect(flightData[2].Icao24).To(Equal("c060b9"))
+			Expect(*(flightData[2].Callsign)).To(Equal("N401TD"))
+			Expect(flightData[2].FirstSeen).To(Equal(int64(1689192818)))
+			Expect(flightData[2].LastSeen).To(Equal(int64(1689198430)))
+			Expect(*(flightData[2].EstArrivalAirport)).To(Equal("KEWR"))
+			Expect(flightData[2].EstDepartureAirport).To(BeNil())
+			Expect(flightData[2].ArrivalAirportCandidatesCount).To(Equal(4))
+			Expect(flightData[2].EstDepartureAirportHorizDistance).To(Equal(int64(13461)))
+			Expect(flightData[2].EstDepartureAirportVertDistance).To(Equal(int64(24)))
+			Expect(flightData[2].EstArrivalAirportHorizDistance).To(Equal(int64(204)))
+			Expect(flightData[2].EstArrivalAirportVertDistance).To(Equal(int64(8)))
+			Expect(flightData[2].DepartureAirportCandidatesCount).To(Equal(1))
 		})
 	})
 })
