@@ -1,5 +1,11 @@
 package gopensky
 
+import (
+	"context"
+	"fmt"
+	"net/http"
+)
+
 var (
 	DecodeRawStateVector     = decodeRawStateVector
 	DecodeWaypoint           = decodeWaypoint
@@ -8,4 +14,13 @@ var (
 	GetTracksRequestParams   = getTracksRequestParams
 	GetStateRequestParams    = getStateRequestParams
 	ParseFlightTrackResponse = parseFlightTrackResponse
+	OpenSkyAPIURL            = openSkyAPIURL
 )
+
+func GetClient(ctx context.Context) (*http.Client, error) {
+	if c, ok := ctx.Value(clientKey).(*Connection); ok {
+		return c.client, nil
+	}
+
+	return nil, fmt.Errorf("%w %s", errContextKey, clientKey)
+}
