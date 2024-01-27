@@ -3,11 +3,9 @@ name: Go
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
-  Unit_test:
+  unit_test:
     name: Unit test
     runs-on: ubuntu-latest
     steps:
