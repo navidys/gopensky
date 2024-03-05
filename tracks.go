@@ -148,7 +148,7 @@ func decodeWaypoint(data []interface{}) (*WayPoint, error) { //nolint:funlen,cyc
 func getTracksRequestParams(time int64, icao24 string) url.Values {
 	requestParams := make(url.Values)
 	if time >= 0 {
-		requestParams.Add("time", fmt.Sprintf("%d", time))
+		requestParams.Add("time", fmt.Sprintf("%d", time)) //nolint:perfsprint
 	}
 
 	if icao24 != "" {

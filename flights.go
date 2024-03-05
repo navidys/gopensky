@@ -142,11 +142,11 @@ func GetFlightsByAircraft(ctx context.Context, icao24 string, begin int64, end i
 func getFlightsRequestParams(airport string, aircraft string, begin int64, end int64) url.Values {
 	requestParams := make(url.Values)
 	if begin >= 0 {
-		requestParams.Add("begin", fmt.Sprintf("%d", begin))
+		requestParams.Add("begin", fmt.Sprintf("%d", begin)) //nolint:perfsprint
 	}
 
 	if end >= 0 {
-		requestParams.Add("end", fmt.Sprintf("%d", end))
+		requestParams.Add("end", fmt.Sprintf("%d", end)) //nolint:perfsprint
 	}
 
 	if aircraft != "" {
