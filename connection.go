@@ -49,7 +49,7 @@ func NewConnection(ctx context.Context, username string, password string) (conte
 		connection.auth = base64.StdEncoding.EncodeToString([]byte(username + ":" + password))
 	}
 
-	dialContext := func(ctx context.Context, _, _ string) (net.Conn, error) {
+	dialContext := func(ctx context.Context, _, _ string) (net.Conn, error) { //nolint:revive
 		return net.Dial("tcp", _url.Host) //nolint:wrapcheck
 	}
 
