@@ -6,7 +6,7 @@ require (
 	github.com/h2non/gock v1.2.0
 	github.com/onsi/ginkgo/v2 v2.18.0
 	github.com/onsi/gomega v1.33.1
-	github.com/rs/zerolog v1.32.0
+	github.com/rs/zerolog v1.33.0
 )
 
 require (
