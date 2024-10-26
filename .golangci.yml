@@ -7,19 +7,11 @@ linters:
     - exhaustruct
     - tagliatelle
     # deprecated
-    - varcheck
-    - deadcode
-    - ifshort
-    - nosnakecase
-    - structcheck
     - rowserrcheck
-    - structcheck
     - wastedassign
-    - scopelint
-    - maligned
-    - interfacer
-    - exhaustivestruct
-    - golint
+    - execinquery
+    - exportloopref
+    - gomnd
 linters-settings:
   errcheck:
     check-blank: false
