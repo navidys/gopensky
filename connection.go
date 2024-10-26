@@ -50,7 +50,7 @@ func NewConnection(ctx context.Context, username string, password string) (conte
 	}
 
 	dialContext := func(ctx context.Context, _, _ string) (net.Conn, error) { //nolint:revive
-		return net.Dial("tcp", _url.Host) //nolint:wrapcheck
+		return net.Dial("tcp", _url.Host)
 	}
 
 	connection.client = &http.Client{
@@ -100,11 +100,11 @@ func (h *apiResponse) isInformational() bool {
 }
 
 func (h *apiResponse) isSuccess() bool {
-	return h.Response.StatusCode/100 == 2 //nolint:gomnd
+	return h.Response.StatusCode/100 == 2 //nolint:mnd
 }
 
 func (h *apiResponse) isRedirection() bool {
-	return h.Response.StatusCode/100 == 3 //nolint:gomnd
+	return h.Response.StatusCode/100 == 3 //nolint:mnd
 }
 
 // process drains the response body, and processes the HTTP status code
