@@ -9,9 +9,7 @@ linters:
     # deprecated
     - rowserrcheck
     - wastedassign
-    - execinquery
-    - exportloopref
-    - gomnd
+    - tenv
 linters-settings:
   errcheck:
     check-blank: false
