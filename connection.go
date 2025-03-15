@@ -18,7 +18,7 @@ const (
 
 type valueKey string
 
-type apiResponse struct {
+type apiResponse struct { //nolint:recvcheck
 	*http.Response
 	Request *http.Request
 }
