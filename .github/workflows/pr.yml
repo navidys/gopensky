@@ -63,7 +63,7 @@ jobs:
           go-version: '1.23'
       - uses: actions/checkout@v3
       - run: |
-          dnf -y install make gcc glib2-devel glibc-static golang
+          dnf -y install make awk gcc glib2-devel glibc-static golang
           make .install.golangci-lint
           make lint
           make gofmt
