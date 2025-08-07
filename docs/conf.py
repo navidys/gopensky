@@ -5,6 +5,7 @@
 import sys
 import os
 import sphinx_rtd_theme
+from datetime import datetime
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -43,7 +44,7 @@ toc_object_entries = False
 
 # General information about the project.
 project = 'Go OpenSky Network API'
-copyright = "2023, Navid Yaghoobi (navidys@fedoraproject.com)"
+copyright = "%s, Navid Yaghoobi (navidys@fedoraproject.com)"%(datetime.now().year)
 author = 'Navid Yaghoobi'
 
 # The version info for the project you're documenting, acts as replacement for

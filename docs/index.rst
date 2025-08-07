@@ -10,10 +10,6 @@ There are some limitation sets for anonymous and OpenSky users, visit following 
     * `OpenSky Network Rest API documentation <https://openskynetwork.github.io/opensky-api/>`_
     * `OpenSky Network Website <https://opensky-network.org/>`_
 
-.. warning::
-
-   This project is under active development.
-
 Installation
 --------------
 
