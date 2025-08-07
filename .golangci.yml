@@ -1,22 +1,29 @@
+version: "2"
 run:
-  deadline: 5m
-  tests: false
+  modules-download-mode: readonly
+
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  exclusions:
+    generated: disable
+
 linters:
-  enable-all: true
   disable:
     - exhaustruct
     - tagliatelle
     # deprecated
-    - rowserrcheck
-    - wastedassign
-    - tenv
-linters-settings:
-  errcheck:
-    check-blank: false
-    exclude-functions:
-      # Used in HTTP handlers, any error is handled by the server itself.
-      - (net/http.ResponseWriter).Write
-      # Never check the logger error.
-      - (github.com/go-kit/log.Logger).Log
-  nolintlint:
-    require-specific: true
+  settings:
+    errcheck:
+      check-blank: false
+      exclude-functions:
+        # Used in HTTP handlers, any error is handled by the server itself.
+        - (net/http.ResponseWriter).Write
+        # Never check the logger error.
+        - (github.com/go-kit/log.Logger).Log
+    nolintlint:
+      require-specific: true
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0

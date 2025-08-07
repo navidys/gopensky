@@ -30,10 +30,14 @@ func GetStates(ctx context.Context, time int64, icao24 []string,
 		return nil, fmt.Errorf("do request: %w", err)
 	}
 
-	defer response.Body.Close()
+	errRespProcess := response.process(&statesRep)
 
-	if err := response.process(&statesRep); err != nil {
-		return nil, err
+	if err := response.Body.Close(); err != nil {
+		return nil, fmt.Errorf("response body close %w", err)
+	}
+
+	if errRespProcess != nil {
+		return nil, errRespProcess
 	}
 
 	statesVecList := make([]StateVector, 0)

@@ -31,10 +31,14 @@ func GetArrivalsByAirport(ctx context.Context, airport string, begin int64, end 
 		return nil, fmt.Errorf("do request: %w", err)
 	}
 
-	defer response.Body.Close()
+	errRespProcess := response.process(&flighDataList)
 
-	if err := response.process(&flighDataList); err != nil {
-		return nil, err
+	if err := response.Body.Close(); err != nil {
+		return nil, fmt.Errorf("response body close %w", err)
+	}
+
+	if errRespProcess != nil {
+		return nil, errRespProcess
 	}
 
 	return flighDataList, nil
@@ -65,10 +69,14 @@ func GetDeparturesByAirport(ctx context.Context, airport string, begin int64, en
 		return nil, fmt.Errorf("do request: %w", err)
 	}
 
-	defer response.Body.Close()
+	errRespProcess := response.process(&flighDataList)
 
-	if err := response.process(&flighDataList); err != nil {
-		return nil, err
+	if err := response.Body.Close(); err != nil {
+		return nil, fmt.Errorf("response body close %w", err)
+	}
+
+	if errRespProcess != nil {
+		return nil, errRespProcess
 	}
 
 	return flighDataList, nil
@@ -95,10 +103,14 @@ func GetFlightsByInterval(ctx context.Context, begin int64, end int64) ([]FlighD
 		return nil, fmt.Errorf("do request: %w", err)
 	}
 
-	defer response.Body.Close()
+	errRespProcess := response.process(&flighDataList)
 
-	if err := response.process(&flighDataList); err != nil {
-		return nil, err
+	if err := response.Body.Close(); err != nil {
+		return nil, fmt.Errorf("response body close %w", err)
+	}
+
+	if errRespProcess != nil {
+		return nil, errRespProcess
 	}
 
 	return flighDataList, nil
@@ -130,10 +142,14 @@ func GetFlightsByAircraft(ctx context.Context, icao24 string, begin int64, end i
 		return nil, fmt.Errorf("do request: %w", err)
 	}
 
-	defer response.Body.Close()
+	errRespProcess := response.process(&flighDataList)
 
-	if err := response.process(&flighDataList); err != nil {
-		return nil, err
+	if err := response.Body.Close(); err != nil {
+		return nil, fmt.Errorf("response body close %w", err)
+	}
+
+	if errRespProcess != nil {
+		return nil, errRespProcess
 	}
 
 	return flighDataList, nil

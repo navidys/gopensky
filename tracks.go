@@ -34,10 +34,14 @@ func GetTrackByAircraft(ctx context.Context, icao24 string, time int64) (FlightT
 		return flightTrack, fmt.Errorf("do request: %w", err)
 	}
 
-	defer response.Body.Close()
+	errRespProcess := response.process(&flightTrackResponse)
 
-	if err := response.process(&flightTrackResponse); err != nil {
-		return flightTrack, err
+	if err := response.Body.Close(); err != nil {
+		return flightTrack, fmt.Errorf("response body close %w", err)
+	}
+
+	if errRespProcess != nil {
+		return flightTrack, errRespProcess
 	}
 
 	flightTrack, err = parseFlightTrackResponse(&flightTrackResponse)
