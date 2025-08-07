@@ -6,6 +6,55 @@ import (
 	"net/url"
 )
 
+type FlighData struct {
+	// Unique ICAO 24-bit address of the transponder in hex string representation.
+	// All letters are lower case.
+	Icao24 string `json:"icao24"`
+
+	// Estimated time of departure for the flight as Unix time (seconds since epoch).
+	FirstSeen int64 `json:"firstSeen"`
+
+	// ICAO code of the estimated departure airport.
+	// Can be nil if the airport could not be identified.
+	EstDepartureAirport *string `json:"estDepartureAirport"`
+
+	// Estimated time of arrival for the flight as Unix time (seconds since epoch).
+	LastSeen int64 `json:"lastSeen"`
+
+	// ICAO code of the estimated arrival airport.
+	// Can be nil if the airport could not be identified.
+	EstArrivalAirport *string `json:"estArrivalAirport"`
+
+	// Callsign of the vehicle (8 chars).
+	// Can be nil if no callsign has been received.
+	// If the vehicle transmits multiple callsigns during the flight,
+	// we take the one seen most frequently.
+	Callsign *string `json:"callsign"`
+
+	// Horizontal distance of the last received airborne position
+	// to the estimated departure airport in meters.
+	EstDepartureAirportHorizDistance int64 `json:"estDepartureAirportHorizDistance"`
+
+	// Vertical distance of the last received airborne position
+	// to the estimated departure airport in meters.
+	EstDepartureAirportVertDistance int64 `json:"estDepartureAirportVertDistance"`
+
+	// Horizontal distance of the last received airborne position
+	// to the estimated arrival airport in meters.
+	EstArrivalAirportHorizDistance int64 `json:"estArrivalAirportHorizDistance"`
+
+	// Vertical distance of the last received airborne position to
+	// the estimated arrival airport in meters.
+	EstArrivalAirportVertDistance int64 `json:"estArrivalAirportVertDistance"`
+
+	// Number of other possible departure airports.
+	// These are airports in short distance to estDepartureAirport.
+	DepartureAirportCandidatesCount int `json:"departureAirportCandidatesCount"`
+
+	// Number of other possible departure airports.
+	ArrivalAirportCandidatesCount int `json:"arrivalAirportCandidatesCount"`
+}
+
 // GetArrivalsByAirport retrieves flights for a certain airport which arrived within a given time interval [being, end].
 // The given time interval must not be larger than seven days!
 func GetArrivalsByAirport(ctx context.Context, airport string, begin int64, end int64) ([]FlighData, error) {
