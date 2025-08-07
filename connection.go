@@ -96,15 +96,15 @@ func (c *Connection) doGetRequest(ctx context.Context, endpoint string, queryPar
 }
 
 func (h *apiResponse) isInformational() bool {
-	return h.Response.StatusCode/100 == 1
+	return h.StatusCode/100 == 1
 }
 
 func (h *apiResponse) isSuccess() bool {
-	return h.Response.StatusCode/100 == 2 //nolint:mnd
+	return h.StatusCode/100 == 2 //nolint:mnd
 }
 
 func (h *apiResponse) isRedirection() bool {
-	return h.Response.StatusCode/100 == 3 //nolint:mnd
+	return h.StatusCode/100 == 3 //nolint:mnd
 }
 
 // process drains the response body, and processes the HTTP status code
@@ -116,7 +116,7 @@ func (h apiResponse) process(unmarshalInto interface{}) error {
 // processWithError drains the response body, and processes the HTTP status code
 // Note: Closing the response.Body is left to the caller.
 func (h apiResponse) processWithError(unmarshalInto interface{}) error {
-	data, err := io.ReadAll(h.Response.Body)
+	data, err := io.ReadAll(h.Body)
 	if err != nil {
 		return fmt.Errorf("unable to process API response: %w", err)
 	}
@@ -137,7 +137,7 @@ func (h apiResponse) processWithError(unmarshalInto interface{}) error {
 		return nil
 	}
 
-	return handleError(h.Response.StatusCode, data)
+	return handleError(h.StatusCode, data)
 }
 
 func handleError(statusCode int, data []byte) error {
