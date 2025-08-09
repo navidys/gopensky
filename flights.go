@@ -82,7 +82,8 @@ func GetArrivalsByAirport(ctx context.Context, airport string, begin int64, end 
 
 	errRespProcess := response.process(&flighDataList)
 
-	if err := response.Body.Close(); err != nil {
+	err = response.Body.Close()
+	if err != nil {
 		return nil, fmt.Errorf("response body close %w", err)
 	}
 
@@ -120,7 +121,8 @@ func GetDeparturesByAirport(ctx context.Context, airport string, begin int64, en
 
 	errRespProcess := response.process(&flighDataList)
 
-	if err := response.Body.Close(); err != nil {
+	err = response.Body.Close()
+	if err != nil {
 		return nil, fmt.Errorf("response body close %w", err)
 	}
 
@@ -154,7 +156,8 @@ func GetFlightsByInterval(ctx context.Context, begin int64, end int64) ([]FlighD
 
 	errRespProcess := response.process(&flighDataList)
 
-	if err := response.Body.Close(); err != nil {
+	err = response.Body.Close()
+	if err != nil {
 		return nil, fmt.Errorf("response body close %w", err)
 	}
 
@@ -193,7 +196,8 @@ func GetFlightsByAircraft(ctx context.Context, icao24 string, begin int64, end i
 
 	errRespProcess := response.process(&flighDataList)
 
-	if err := response.Body.Close(); err != nil {
+	err = response.Body.Close()
+	if err != nil {
 		return nil, fmt.Errorf("response body close %w", err)
 	}
 

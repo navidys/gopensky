@@ -10,10 +10,14 @@ formatters:
     generated: disable
 
 linters:
+  default: all
   disable:
+    - revive
     - exhaustruct
     - tagliatelle
     # deprecated
+    - wsl
+    - depguard
   settings:
     errcheck:
       check-blank: false
@@ -22,8 +26,13 @@ linters:
         - (net/http.ResponseWriter).Write
         # Never check the logger error.
         - (github.com/go-kit/log.Logger).Log
+        - fmt:.*
     nolintlint:
       require-specific: true
+  exclusions:
+    paths:
+      - examples/
+      - ".*_test.go"
 issues:
   max-issues-per-linter: 0
   max-same-issues: 0

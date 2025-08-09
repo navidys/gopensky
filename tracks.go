@@ -90,7 +90,8 @@ func GetTrackByAircraft(ctx context.Context, icao24 string, time int64) (FlightT
 
 	errRespProcess := response.process(&flightTrackResponse)
 
-	if err := response.Body.Close(); err != nil {
+	err = response.Body.Close()
+	if err != nil {
 		return flightTrack, fmt.Errorf("response body close %w", err)
 	}
 

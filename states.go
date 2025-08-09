@@ -172,7 +172,8 @@ func GetStates(ctx context.Context, time int64, icao24 []string,
 
 	errRespProcess := response.process(&statesRep)
 
-	if err := response.Body.Close(); err != nil {
+	err = response.Body.Close()
+	if err != nil {
 		return nil, fmt.Errorf("response body close %w", err)
 	}
 

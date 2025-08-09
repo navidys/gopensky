@@ -20,6 +20,7 @@ type valueKey string
 
 type apiResponse struct { //nolint:recvcheck
 	*http.Response
+
 	Request *http.Request
 }
 
@@ -50,7 +51,7 @@ func NewConnection(ctx context.Context, username string, password string) (conte
 	}
 
 	dialContext := func(ctx context.Context, _, _ string) (net.Conn, error) { //nolint:revive
-		return net.Dial("tcp", _url.Host)
+		return net.Dial("tcp", _url.Host) //nolint:noctx
 	}
 
 	connection.client = &http.Client{
@@ -123,7 +124,8 @@ func (h apiResponse) processWithError(unmarshalInto interface{}) error {
 
 	if h.isSuccess() || h.isRedirection() {
 		if unmarshalInto != nil {
-			if err := json.Unmarshal(data, unmarshalInto); err != nil {
+			err := json.Unmarshal(data, unmarshalInto)
+			if err != nil {
 				return fmt.Errorf("unmarshalling into %#v, data %q: %w", unmarshalInto, string(data), err)
 			}
 
