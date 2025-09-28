@@ -1,6 +1,6 @@
 module github.com/navidys/gopensky
 
-go 1.23.3
+go 1.24.0
 
 require (
 	github.com/h2non/gock v1.2.0
