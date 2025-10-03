@@ -40,16 +40,15 @@ jobs:
           check_filenames: true
           skip: ./.git,./vendor,*_test.go,go.sum,go.mod
 
-  vendoring:
+  modverify:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-go@v3
         with:
-          go-version: '1.23'
+          go-version: '1.24.7'
       - uses: actions/checkout@v3
       - run: |
           go mod tidy
-          go mod vendor
           go mod verify
           bash ./hack/tree_status.sh
 
@@ -60,7 +59,7 @@ jobs:
     steps:
       - uses: actions/setup-go@v3
         with:
-          go-version: '1.23'
+          go-version: '1.24.7'
       - uses: actions/checkout@v3
       - run: |
           dnf -y install make awk gcc glib2-devel glibc-static golang
@@ -72,10 +71,10 @@ jobs:
     name: Unit test
     runs-on: ubuntu-latest
     steps:
-    - name: Set up Go 1.23
-      uses: actions/setup-go@v1
+    - name: Set up Go
+      uses: actions/setup-go@v3
       with:
-        go-version: 1.23
+        go-version: 1.24.7
       id: go
 
     - name: Check out code into the Go module directory

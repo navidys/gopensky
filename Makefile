@@ -58,7 +58,7 @@ validate: gofmt lint pre-commit codespell vendor ## Validate code (fmt, lint, ..
 .PHONY: vendor
 vendor: ## Check vendor
 	$(GO) mod tidy
-	$(GO) mod vendor
+#	$(GO) mod vendor
 	$(GO) mod verify
 	@bash ./hack/tree_status.sh
 
