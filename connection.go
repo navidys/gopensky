@@ -110,13 +110,13 @@ func (h *apiResponse) isRedirection() bool {
 
 // process drains the response body, and processes the HTTP status code
 // Note: Closing the response.Body is left to the caller.
-func (h apiResponse) process(unmarshalInto interface{}) error {
+func (h apiResponse) process(unmarshalInto any) error {
 	return h.processWithError(unmarshalInto)
 }
 
 // processWithError drains the response body, and processes the HTTP status code
 // Note: Closing the response.Body is left to the caller.
-func (h apiResponse) processWithError(unmarshalInto interface{}) error {
+func (h apiResponse) processWithError(unmarshalInto any) error {
 	data, err := io.ReadAll(h.Body)
 	if err != nil {
 		return fmt.Errorf("unable to process API response: %w", err)

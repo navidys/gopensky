@@ -33,7 +33,7 @@ type StatesResponse struct {
 	Time int64 `json:"time"`
 
 	// The state vectors.
-	States [][]interface{} `json:"states"`
+	States [][]any `json:"states"`
 }
 
 type States struct {
@@ -146,7 +146,7 @@ type BoundingBoxOptions struct {
 	Lomax float64
 }
 
-// Retrieve state vectors for a given time. If time = 0 the most recent ones are taken.
+// GetStates retrieve state vectors for a given time. If time = 0 the most recent ones are taken.
 // It is possible to query a certain area defined by a bounding box of WGS84 coordinates.
 // You can request the category of aircraft by setting extended to true.
 func GetStates(ctx context.Context, time int64, icao24 []string,
@@ -226,7 +226,7 @@ func getStateRequestParams(time int64, icao24 []string, bBox *BoundingBoxOptions
 	return requestParams
 }
 
-func decodeRawStateVector(data []interface{}) (*StateVector, error) { //nolint:funlen,cyclop,gocognit,gocyclo
+func decodeRawStateVector(data []any) (*StateVector, error) { //nolint:funlen,cyclop,gocognit,gocyclo
 	var assertionOK bool
 
 	stVector := StateVector{}

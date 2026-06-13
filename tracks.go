@@ -17,11 +17,11 @@ const (
 )
 
 type FlightTrackResponse struct {
-	Icao24    string          `json:"icao24"`
-	StartTime float64         `json:"startTime"`
-	EndTime   float64         `json:"endTime"`
-	Callsign  *string         `json:"callsign"`
-	Path      [][]interface{} `json:"path"`
+	Icao24    string  `json:"icao24"`
+	StartTime float64 `json:"startTime"`
+	EndTime   float64 `json:"endTime"`
+	Callsign  *string `json:"callsign"`
+	Path      [][]any `json:"path"`
 }
 
 type FlightTrack struct {
@@ -134,7 +134,7 @@ func parseFlightTrackResponse(response *FlightTrackResponse) (FlightTrack, error
 	return flightTrack, nil
 }
 
-func decodeWaypoint(data []interface{}) (*WayPoint, error) { //nolint:funlen,cyclop
+func decodeWaypoint(data []any) (*WayPoint, error) { //nolint:funlen,cyclop
 	if len(data) < trackOnGroundIndex {
 		return nil, errWaypointsDataCount
 	}

@@ -18,6 +18,7 @@ linters:
     # deprecated
     - wsl
     - depguard
+    - gomodguard
   settings:
     errcheck:
       check-blank: false
